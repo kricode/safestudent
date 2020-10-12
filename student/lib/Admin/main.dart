@@ -1,48 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:backdrop/backdrop.dart';
+import 'package:projet/Admin/demandes.dart';
+import 'package:projet/Database/FirestoreService.dart';
+import 'package:provider/provider.dart';
 import './widgets/avatar.dart';
 import './widgets/iteminscription.dart';
 
-void main() {
-  runApp(MyApp());
+class admin extends StatefulWidget {
+  admin({Key key}) : super(key: key);
+
+  _adminState createState() => _adminState();
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class _adminState extends State<admin> {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Acceuil',
-      theme: ThemeData(
-       
-        primarySwatch: Colors.blue,
-
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  
- @override
-  Widget Widget1  (BuildContext ontext){
-    return Container(child: Text("this is the acceuil"),);
-  }
-  int _currentIndex = 0;
-//final List<Widget> _pages = [Widget1(), Widget2()];
-
-@override
 Widget build(BuildContext context) {
+      final FirestoreService firebaseServices = FirestoreService();
+
+int _currentindex = 0;
   return MaterialApp(
 
     title: 'Safe Student',
@@ -60,11 +35,13 @@ Widget build(BuildContext context) {
           ListTile(title: Text("Acceuil")),
           ListTile(title: Text("Deconnexion")),
         ],
-        onTap: (int position) => {setState(() => _currentIndex = position)},
+        //onTap: (int position) => {setState(() => _currentIndex = position)},
       ),
       frontLayer: Container(
-        child: Center(
-         child: iteminscription(),
+        child: StreamProvider(
+        create: (BuildContext context) => firebaseServices.getUserList(),
+         //child: iteminscription(),
+         child: DemandesList(),
         )
       )
     ),
@@ -73,6 +50,4 @@ Widget build(BuildContext context) {
 
     
   }
-
- 
 }
