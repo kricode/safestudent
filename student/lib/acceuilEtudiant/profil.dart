@@ -157,20 +157,58 @@ class Profil extends StatefulWidget{
                            borderRadius:BorderRadius.circular(50.0),
                           
                         ),
-                        child:Row(
-                        
-                          children:<Widget>[
-                               Icon(Icons.vpn_key,color: Colors.grey,),
-                               
+                      child:Row(
+                              
+                              children:<Widget>[
                                 Text(
-                            "\t Reset password",
+                            "Maladie",
                             textAlign: TextAlign.left,
                             style: TextStyle(fontWeight: FontWeight.w100),
                           ),
-                         
-                            
-                          ]
-                        )
+                          Expanded(
+                              child: Text(
+                            "diabétique",
+                            textDirection: TextDirection.ltr,
+                            textAlign: TextAlign.right,
+                            style: TextStyle(fontWeight: FontWeight.w100),
+                          ))
+                             
+                                
+                              ]
+                            ),
+                     ),
+                      SizedBox(height:16) ,
+                      
+                        Container(
+                        width:300,
+                          height:50.0,
+                          padding: EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                          color:Colors.white,
+                           borderRadius:BorderRadius.circular(50.0),
+                          
+                        ),
+                      child:Row(
+                              
+                              children:<Widget>[
+                                 
+                               
+                                Text(
+                            "Département",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(fontWeight: FontWeight.w100),
+                          ),
+                          Expanded(
+                              child: Text(
+                            "Informatique",
+                            textDirection: TextDirection.ltr,
+                            textAlign: TextAlign.right,
+                            style: TextStyle(fontWeight: FontWeight.w100),
+                          ))
+                             
+                                
+                              ]
+                            ),
                      ),
                      SizedBox(height:16,),
                      
@@ -237,29 +275,7 @@ class Profil extends StatefulWidget{
                           ),
                            SizedBox(height:16) ,
                       
-                        Container(
-                        width:300,
-                          height:50.0,
-                          padding: EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color:Colors.white,
-                           borderRadius:BorderRadius.circular(50.0),
-                          
-                        ),
-                        child:Row(
-                        
-                          children:<Widget>[
-                             Icon(Icons.block,color:Colors.grey),
-                            Text("\t Log out",
-                             textDirection: TextDirection.ltr,
-                             textAlign: TextAlign.left,
-                            style: TextStyle(fontWeight: FontWeight.w100),),
-                            
-                         
-                            
-                          ]
-                        )
-                     ),
+                       
 
                         
                       

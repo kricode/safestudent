@@ -1,4 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:projet/Database/FirestoreService.dart';
+import 'package:projet/helper/helperfunctions.dart';
+import 'package:projet/redirect.dart';
 import './Inscription.dart';
 import '../acceuilEtudiant/main.dart';
 import '../Database/AuthService.dart';
@@ -12,27 +16,46 @@ class Connection extends StatefulWidget {
 }
 
 class _ConnectionState extends State<Connection> {
-  static const menuItems = <String>[
-    'Cardiologie',
-    'Cardiovasculaire',
-    'dermatologiques',
-    'respiratoire',
-    'dermatologiques',
-    'Diabetique',
-  ];
+
+
+    AuthService authService = AuthService();
+   
+   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+  bool isLoading = false;
+
+    signIn() async {
+    if (formKey.currentState.validate()) {
+      setState(() {
+        isLoading = true;
+      });
+
+      await authService
+          .signInWithEmailAndPassword(
+              _emailController.text, _passwordController.text)
+          .then((result) async {
+        if (result != null)  {
+          QuerySnapshot userInfoSnapshot =
+              await FirestoreService().getUserInfo(_emailController.text);
+
+         
+
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        } else {
+          print ('cet utilisateur existe pas');
+        }
+      });
+    }
+  }
 @override
   Widget build(BuildContext context) {
-    AuthService service = AuthService();
-    String document = 'demande';
-  /*  readData(){
-      DocumentReference documentReference = Firestore.instance.collection('demandes').document("demande");
-      documentReference.get().then((datasnapshot) {
-        print(datasnapshot.data["nom"]);
-      });
-    }*/
-    String dropdownValue;
-      final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+
+
+   
+   
 
     var scrWidth = MediaQuery.of(context).size.width;
     var scrHeight = MediaQuery.of(context).size.height;
@@ -43,238 +66,251 @@ class _ConnectionState extends State<Connection> {
           physics: BouncingScrollPhysics(),
           child: Stack(
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 40.0, top: 40),
-                      child: Text(
-                        'Bienvenue',
-                        style: TextStyle(
-                          fontFamily: 'Cardo',
-                          fontSize: 35,
-                          color: Color(0xff0C2551),
-                          fontWeight: FontWeight.w900,
+              Form(
+                key: formKey,
+                              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 50),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 40.0, top: 40),
+                        child: Text(
+                          'Bienvenue',
+                          style: TextStyle(
+                            fontFamily: 'Cardo',
+                            fontSize: 35,
+                            color: Color(0xff0C2551),
+                            fontWeight: FontWeight.w900,
+                          ),
                         ),
+                        //
+                      ),
+                    ),
+                   
+                    //
+                    SizedBox(
+                      height: 100,
+                    ),
+                    //
+                    
+                    //
+
+                    SizedBox(
+                      height: 30,
+                    ),
+                    //
+
+                    //
+                    SizedBox(
+                      height: 15,
+                    ),
+                    //
+                      Column(
+                            
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 50.0, bottom: 8),
+                                  child: Text(
+                                    "Email",
+                                    style: TextStyle(
+                                      fontFamily: 'Product Sans',
+                                      fontSize: 15,
+                                      color: Color(0xff8f9db5),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              //
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(40, 0, 40, 10),
+                                child: TextFormField(
+                                  validator: (val) {
+                              return RegExp(
+                                          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                      .hasMatch(val)
+                                  ? null
+                                  : "Entrez un E-mail valide";
+                            },
+                                  controller: _emailController,
+                                  
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Color(0xff0962ff),
+                                      fontWeight: FontWeight.bold),
+                                  decoration: InputDecoration(
+                                    hintText: "Abdelkrim@email.com",
+                                    hintStyle: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey[350],
+                                        fontWeight: FontWeight.w600),
+                                    contentPadding:
+                                        EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                    focusColor: Color(0xff0962ff),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(color: Color(0xff0962ff)),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(
+                                        color: Colors.grey[350],
+                                      ),
+                                    ),
+                                    
+                                  ),
+                                ),
+                              ),
+                              //
+                            ],
+                          ),
+                    //
+                    SizedBox(
+                      height: 15,
+                    ),
+                    //
+                                            Column(
+                            
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 50.0, bottom: 8),
+                                  child: Text(
+                                    "Mot De Passe",
+                                    style: TextStyle(
+                                      fontFamily: 'Product Sans',
+                                      fontSize: 15,
+                                      color: Color(0xff8f9db5),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              //
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(40, 0, 40, 10),
+                                child: TextFormField(
+                                  obscureText: true,
+                                  validator: (val) {
+                              return val.length > 6
+                                  ? null
+                                  : "Votre Mot De Passe Doit Depasser 6 caracteres";
+                            },
+                            
+                                  controller: _passwordController,
+                                  
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Color(0xff0962ff),
+                                      fontWeight: FontWeight.bold),
+                                  decoration: InputDecoration(
+                                    hintText: "*************",
+                                    hintStyle: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey[350],
+                                        fontWeight: FontWeight.w600),
+                                    contentPadding:
+                                        EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                    focusColor: Color(0xff0962ff),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(color: Color(0xff0962ff)),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(
+                                        color: Colors.grey[350],
+                                      ),
+                                    ),
+                                    
+                                  ),
+                                ),
+                              ),
+                              //
+                            ],
+                          ),
+                    //
+                    SizedBox(
+                      height: 100,
+                    ),
+                   
+                    //
+                    Text(
+                      "Veuillez vérifier vos coordonnées ",
+                      style: TextStyle(
+                        fontFamily: 'Product Sans',
+                        fontSize: 15.5,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff8f9db5).withOpacity(0.45),
                       ),
                       //
                     ),
-                  ),
-                 
-                  //
-                  SizedBox(
-                    height: 30,
-                  ),
-                  //
-                  
-                  //
-
-                  SizedBox(
-                    height: 30,
-                  ),
-                  //
-
-                  //
-                  SizedBox(
-                    height: 15,
-                  ),
-                  //
-                    Column(
-                          
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 50.0, bottom: 8),
-                                child: Text(
-                                  "Email",
-                                  style: TextStyle(
-                                    fontFamily: 'Product Sans',
-                                    fontSize: 15,
-                                    color: Color(0xff8f9db5),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            //
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(40, 0, 40, 10),
-                              child: TextFormField(
-                                controller: _emailController,
-                                
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: Color(0xff0962ff),
-                                    fontWeight: FontWeight.bold),
-                                decoration: InputDecoration(
-                                  hintText: "Abdelkrim@email.com",
-                                  hintStyle: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey[350],
-                                      fontWeight: FontWeight.w600),
-                                  contentPadding:
-                                      EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                                  focusColor: Color(0xff0962ff),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                    borderSide: BorderSide(color: Color(0xff0962ff)),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                    borderSide: BorderSide(
-                                      color: Colors.grey[350],
-                                    ),
-                                  ),
-                                  
-                                ),
-                              ),
-                            ),
-                            //
-                          ],
-                        ),
-                  //
-                  SizedBox(
-                    height: 15,
-                  ),
-                  //
-                                          Column(
-                          
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 50.0, bottom: 8),
-                                child: Text(
-                                  "Mot De Passe",
-                                  style: TextStyle(
-                                    fontFamily: 'Product Sans',
-                                    fontSize: 15,
-                                    color: Color(0xff8f9db5),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            //
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(40, 0, 40, 10),
-                              child: TextFormField(
-                                controller: _passwordController,
-                                
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: Color(0xff0962ff),
-                                    fontWeight: FontWeight.bold),
-                                decoration: InputDecoration(
-                                  hintText: "*************",
-                                  hintStyle: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey[350],
-                                      fontWeight: FontWeight.w600),
-                                  contentPadding:
-                                      EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                                  focusColor: Color(0xff0962ff),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                    borderSide: BorderSide(color: Color(0xff0962ff)),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                    borderSide: BorderSide(
-                                      color: Colors.grey[350],
-                                    ),
-                                  ),
-                                  
-                                ),
-                              ),
-                            ),
-                            //
-                          ],
-                        ),
-                  //
-                  SizedBox(
-                    height: 100,
-                  ),
-                 
-                  //
-                  Text(
-                    "Veuillez vérifier vos coordonnées ",
-                    style: TextStyle(
-                      fontFamily: 'Product Sans',
-                      fontSize: 15.5,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xff8f9db5).withOpacity(0.45),
-                    ),
-                    //
-                  ),
            
-                GestureDetector(
-                      child: Container(
-                      
-                      margin: EdgeInsets.symmetric(vertical: 20),
-                      width: scrWidth * 0.40,
-                      height: 75,
-                      decoration: BoxDecoration(
-                        color: Color(0xff0962ff),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Valider',
-                          style: TextStyle(
-                            fontFamily: 'ProductSans',
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white70,
+                  GestureDetector(
+                        child: Container(
+                        
+                        margin: EdgeInsets.symmetric(vertical: 20),
+                        width: scrWidth * 0.40,
+                        height: 75,
+                        decoration: BoxDecoration(
+                          color: Color(0xff0962ff),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Valider',
+                            style: TextStyle(
+                              fontFamily: 'ProductSans',
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white70,
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                        onTap: (){
+                          signIn();
+                       }),
+                    GestureDetector(
                       onTap: (){
-                        var name = _emailController.text;
-                        print('voila le mail $name');
-                        service.signUpWithEmailAndPassword(_emailController.text, _passwordController.text);
-                       Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
-                        );
-                     }),
-                  GestureDetector(
-                    onTap: (){
-                      print("vous avez appuyé sur inscription");
-                    //  readData();
-                      Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => admin()),  );
-                    },
-                      child: RichText(
-                        
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'Vous ' ' avez pas de compte? ',
-                            style: TextStyle(
-                              fontFamily: 'Product Sans',
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xff8f9db5).withOpacity(0.45),
+                        print("vous avez appuyé sur inscription");
+                      //  readData();
+                        Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Inscription()),  );
+                      },
+                        child: RichText(
+                          
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Vous ' ' avez pas de compte? ',
+                              style: TextStyle(
+                                fontFamily: 'Product Sans',
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xff8f9db5).withOpacity(0.45),
+                              ),
                             ),
-                          ),
-                          TextSpan(
-                            
-                            text: 'Inscrivez vous',
-                            
-                            style: TextStyle(
-                              fontFamily: 'Product Sans',
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xff90b7ff),
-                            ),
-                          )
-                        ],
+                            TextSpan(
+                              
+                              text: 'Inscrivez vous',
+                              
+                              style: TextStyle(
+                                fontFamily: 'Product Sans',
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xff90b7ff),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               ClipPath(
                 clipper: OuterClippedPart(),

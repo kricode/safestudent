@@ -6,9 +6,10 @@ class uti{
   String name;
   String email;
   String password;
+  String role;
  
 
-  uti({this.name, this.email, this.password});
+  uti({this.name, this.email, this.password, this.role});
 
    
   
@@ -18,6 +19,7 @@ class uti{
      
     'email': email,
     'password': password,
+    'role': role,
    
     };
   }
@@ -26,7 +28,8 @@ class uti{
       :
         name = firestore['name'],
         email = firestore['email'],
-        password = firestore['password']
+        password = firestore['password'],
+        role = firestore['role']
       
         ;
 }

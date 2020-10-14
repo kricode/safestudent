@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:backdrop/backdrop.dart';
-import 'package:projet/Admin/demandes.dart';
 import 'package:projet/Database/FirestoreService.dart';
 import 'package:provider/provider.dart';
 import './widgets/avatar.dart';
-import './widgets/iteminscription.dart';
 
 class admin extends StatefulWidget {
   admin({Key key}) : super(key: key);
@@ -38,11 +36,12 @@ int _currentindex = 0;
         //onTap: (int position) => {setState(() => _currentIndex = position)},
       ),
       frontLayer: Container(
-        child: StreamProvider(
+        child: avatar(),
+      /*  child: StreamProvider(
         create: (BuildContext context) => firebaseServices.getUserList(),
          //child: iteminscription(),
          child: DemandesList(),
-        )
+        )*/
       )
     ),
     

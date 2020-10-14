@@ -1,9 +1,13 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../modals/Utilisateur.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+    FirebaseFirestore _db = FirebaseFirestore.instance;
+
 
   uti _userFromFirebaseUser(User user) {
     return uti != null ? uti(email: user.email) : null;
@@ -42,6 +46,10 @@ class AuthService {
     }
   }
 
+/*Future getRole(User user) async{
+  if (_db.collection("users").doc(user.email).get(['role'])) =   )
+
+}*/
  
 
   Future signOut() async {

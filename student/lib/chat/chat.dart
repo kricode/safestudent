@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:chatapp/helper/constants.dart';
-import 'package:chatapp/services/database.dart';
-import 'package:chatapp/widget/widget.dart';
+import '../helper/constants.dart';
+import '../Database/FirestoreService.dart';
+import '../widget/widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -45,7 +45,7 @@ class _ChatState extends State<Chat> {
             .millisecondsSinceEpoch,
       };
 
-      DatabaseMethods().addMessage(widget.chatRoomId, chatMessageMap);
+      FirestoreService().addMessage(widget.chatRoomId, chatMessageMap);
 
       setState(() {
         messageEditingController.text = "";
@@ -55,7 +55,7 @@ class _ChatState extends State<Chat> {
 
   @override
   void initState() {
-    DatabaseMethods().getChats(widget.chatRoomId).then((val) {
+    FirestoreService().getChats(widget.chatRoomId).then((val) {
       setState(() {
         chats = val;
       });

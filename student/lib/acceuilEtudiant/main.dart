@@ -1,14 +1,12 @@
 
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+import '../Sign/connection.dart';
+
+import 'package:projet/acceuilEtudiant/assistance.dart';
+
 import 'package:projet/acceuilEtudiant/profil.dart';
-
-
 import 'calendrier.dart';
-
-
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -102,20 +100,44 @@ class _HomeScreenState extends State<HomeScreen> {
                                  
                                 Align(
                                alignment: Alignment.topRight,
-                             child: IconButton(
-                                    icon: Image.asset("assets/images/etudiant.png"),
-                              color: Colors.black,
-                              alignment: Alignment.topRight,
-                              padding: EdgeInsets.all(8.0),
+                             child: SizedBox(
+                                 width:40,
+                                 height: 40,
+                                                            child: IconButton(
+                                      icon: Image.asset('assets/images/kisspng-start-svg-png-icon-free-download-501746-onlin-5b6a8876ad34f1.8833342315337084067095.png'),
+                                color: Colors.black,
+                                alignment: Alignment.topRight,
+                               
                       
-                
+                              // l'alerte pour se déconnecter de l'application étudiant 
                             onPressed: (){
-                              Navigator.push(
-                              context,
-                               MaterialPageRoute(builder: (context) => Profil()),
-              );
+                               showDialog(context:context,
+                               builder: (context) =>  AlertDialog(
+                                      title: Text("voulez vous vos déconnecter?"),
+                                      actions: [
+                                        FlatButton(onPressed:(){
+                                            Navigator.pop(context);
+                                        },
+                                          
+                                    child: Text("Non")),
+                                        // ignore: missing_required_param
+                                        FlatButton(
+                                          onPressed: (){
+                                    Navigator.push(context
+                                     , MaterialPageRoute(builder: (context) => Connection()));
+                                        },
+                                        child: Text('se déconnecter'),
+                                        ),
+                                      ],
+                                      elevation: 24.0,
+                                   
+                                     
+                                ),);
+                               
+          
                             },
                             ),
+                             ),
                             ),
                         
                              ],
@@ -177,7 +199,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                    childAspectRatio: 1.0,
                                    primary: false,
                                    children: <Widget>[
-                                    Card(
+                                            GestureDetector(
+                                              onTap: (){
+                                                 Navigator.push(
+                              context,
+                               MaterialPageRoute(builder: (context) => AssistancePage()),
+              );},
+                                            child: Card(
                                       
                                          shape: RoundedRectangleBorder(
                                            borderRadius:BorderRadius.circular(12)),
@@ -198,6 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                      .copyWith(fontSize: 15),
                                                )
                                            ])),
+                                            ),
                                      
                                             Card(
                                        shape: RoundedRectangleBorder(
@@ -250,7 +279,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                )
                                          ])),
                                             ),
-                                            Card(
+                                            GestureDetector(
+                                              onTap: (){
+                                                 Navigator.push(
+                              context,
+                               MaterialPageRoute(builder: (context) => Profil()),
+              );},
+                                            child:Card(
                                        shape: RoundedRectangleBorder(
                                          borderRadius:BorderRadius.circular(12)),
                                          elevation:8,
@@ -263,14 +298,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                              ),
                                              SizedBox(height:4),
                                              Text(
-                                               "Carnet de santé",
+                                               "Profil Etudiant",
                                                textAlign: TextAlign.center,
                                                style: Theme.of(context)
                                                    .textTheme
                                                    .headline6
                                                    .copyWith(fontSize: 15),
                                              )
-                                         ])),
+                                         ])),),
+                                        
                                             
                                    ],
                                  ),
@@ -302,6 +338,7 @@ class _HomeScreenState extends State<HomeScreen> {
                            
                          );
   }
+  
                       
 }
                      

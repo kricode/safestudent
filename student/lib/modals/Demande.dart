@@ -6,12 +6,13 @@ class Demande{
   String name;
   String email;
   String password;
+  DateTime anniv;
   String cas;
   String departement;
   String image;
   String role;
 
-  Demande({this.id ,this.name, this.email, this.password, this.cas, this.departement, this.image, this.role});
+  Demande({this.id ,this.name, this.email, this.password, this.cas, this.departement, this.image, this.role, this.anniv});
 
    
   
@@ -25,6 +26,7 @@ class Demande{
     'departement': departement,
     'image': image,
     'role' : role,
+    'anniv' : anniv
    
     };
   }
@@ -37,7 +39,8 @@ class Demande{
         cas = firestore['cas'],
         departement = firestore['departement'],
         image = firestore['image'],
-        role = firestore['role']
+        role = firestore['role'],
+        anniv = firestore['anniv']
         ;
 }
 

@@ -32,9 +32,9 @@ dependencies:
   cloud_firestore:
   firebase_core:
   firebase_auth:
-
-
-  
+  image_picker:
+  firebase_storage:
+  permission_handler:
   flutter_dropdown: ^0.0.8
   provider: ^4.0.5
   uuid: ^2.0.4
@@ -79,8 +79,8 @@ flutter:
    - assets/images/icons8-carnet-de-santé-96.png
    - assets/images/icons8-hôpital-3-96.png
    - assets/images/icons8-utilisateur-96.png
-   - assets/etudiant2.png
-   - assets/doctor.png
+   - assets/images/etudiant2.png
+   - assets/images/doctor.png
    
   #   - images/a_dot_ham.jpeg
 

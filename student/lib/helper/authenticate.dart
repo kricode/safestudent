@@ -1,4 +1,4 @@
-import 'package:chatapp/views/signin.dart';
+/*import 'package:chatapp/views/signin.dart';
 import 'package:chatapp/views/signup.dart';
 import 'package:flutter/material.dart';
 
@@ -25,3 +25,4 @@ class _AuthenticateState extends State<Authenticate> {
     }
   }
 }
+*/

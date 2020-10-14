@@ -1,16 +1,16 @@
 
-class Users{
+class Etudiant{
   
 
-  String id;
   String name;
   String email;
   String password;
   String cas;
   String departement;
+  
   String image;
 
-  Users({this.id ,this.name, this.email, this.password, this.cas, this.departement, this.image});
+  Etudiant({this.name, this.email, this.password, this.cas, this.departement,  this.image});
 
    
   
@@ -22,19 +22,22 @@ class Users{
     'password': password,
     'cas': cas,
     'departement': departement,
-    'image': image,
+    
+    'image': image
    
     };
   }
 
-   Users.fromFirestore(Map<String, dynamic> firestore)
-      : id= firestore['id'],
+   Etudiant.fromFirestore(Map<String, dynamic> firestore)
+      : 
         name = firestore['name'],
         email = firestore['email'],
         password = firestore['password'],
         cas = firestore['cas'],
         departement = firestore['departement'],
-        image = firestore['image']
+       
+                image = firestore['image']
+
         ;
 }
 

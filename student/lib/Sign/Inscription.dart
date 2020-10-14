@@ -1,8 +1,12 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:projet/Database/FirestoreService.dart';
+import 'package:projet/Sign/connection.dart';
 import '../acceuilEtudiant/main.dart';
-import'package:flutter_dropdown/flutter_dropdown.dart';
 import '../modals/Demande.dart';
+import 'dart:io';
 
 
 
@@ -14,16 +18,7 @@ class Inscription extends StatefulWidget {
 
 class _InscriptionState extends State<Inscription> {
 
- /* @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _casController.dispose();
-    _departementController.dispose();
-    _imageController.dispose();
-    super.dispose();
-  }*/
+ 
 
 FirestoreService service = FirestoreService();
 
@@ -44,6 +39,9 @@ FirestoreService service = FirestoreService();
         ),
       )
       .toList();
+
+        DateTime selectedDate = DateTime.now();
+
     String  selectedval;
    GlobalKey<FormState> _formKey = GlobalKey<FormState>();
    TextEditingController _nameController = TextEditingController();
@@ -52,7 +50,21 @@ FirestoreService service = FirestoreService();
    TextEditingController _casController = TextEditingController();
    TextEditingController _departementController = TextEditingController();
    TextEditingController _imageController = TextEditingController();
-   String _myActivity;
+  
+    String imageUrl;
+     
+Future<void> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(1990, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });
+  }
+  
   @override
   Widget build(BuildContext context) {
 
@@ -68,6 +80,7 @@ FirestoreService service = FirestoreService();
           body: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
             child: Form(
+              key : _formKey,
                 child: Stack(
                 children: [
                   Column(
@@ -123,14 +136,14 @@ FirestoreService service = FirestoreService();
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(40, 0, 40, 10),
                                 child: TextFormField(
+                                   validator: (val) {
+                              return val.length > 9
+                                  ? null
+                                  : "Entrez votre Nom et Prenom";
+                            },
                                   
                                   controller:  _nameController,
-                                  obscureText: "Nom" == 'Password' ? true : false,
-                                  // this can be changed based on usage -
-                                  // such as - onChanged or onFieldSubmitted
-                                  onChanged: (value) {
-                                   // demandeProvider.changeName(value);
-                                  },
+                                  
                                   style: TextStyle(
                                     
                                       fontSize: 18,
@@ -185,12 +198,14 @@ FirestoreService service = FirestoreService();
                                 padding: const EdgeInsets.fromLTRB(40, 0, 40, 10),
                                 child: TextFormField(
                                   controller: _emailController,
-                                  obscureText: "Email" == 'Pasword' ? true : false,
-                                  // this can be changed based on usage -
-                                  // such as - onChanged or onFieldSubmitted
-                                  onChanged: (value) {
-                                  //  demandeProvider.changeEmail(value);
-                                  },
+                                  
+                          validator: (val) {
+                            return RegExp(
+                                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                    .hasMatch(val)
+                                ? null
+                                : "Please Enter Correct Email";
+                          },
                                   style: TextStyle(
                                       fontSize: 18,
                                       color: Color(0xff0962ff),
@@ -242,13 +257,14 @@ FirestoreService service = FirestoreService();
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(40, 0, 40, 10),
                                 child: TextFormField(
+                                   validator: (val) {
+                              return val.length > 6
+                                  ? null
+                                  : "Votre Mot De Passe Doit Depasser 6 caracteres";
+                            },
                                   controller: _passwordController,
-                                  obscureText: "Password" == 'Password' ? true : false,
-                                  // this can be changed based on usage -
-                                  // such as - onChanged or onFieldSubmitted
-                                  onChanged: (value) {
-                           //         demandeProvider.changePassword(value);
-                                  },
+                                  obscureText: true ,
+                                  
                                   style: TextStyle(
                                       fontSize: 18,
                                       color: Color(0xff0962ff),
@@ -279,7 +295,49 @@ FirestoreService service = FirestoreService();
                               //
                             ],
                           ),
+                          Column(
+                            
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 50.0, bottom: 8),
+                                  child: Text(
+                                    "Votre Date de Naissance",
+                                    style: TextStyle(
+                                      fontFamily: 'Product Sans',
+                                      fontSize: 15,
+                                      color: Color(0xff8f9db5),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text("${selectedDate.toLocal()}".split(' ')[0], style:  TextStyle(
+                                      fontFamily: 'Product Sans',
+                                      fontSize: 15,
+                                      color: Color(0xff8f9db5),
+                                    ),),
+            SizedBox(height: 20.0,),
+            RaisedButton(
+                color: Color(0xff0962ff),
+              
+              onPressed: () => _selectDate(context),
+              child: Text('Selectionner', style: TextStyle(
+                                      fontFamily: 'Product Sans',
+                                      fontSize: 15,
+                                      color: Colors.white
+                                    ),),
+            ),
+          ],
+        ),
+                              //
+                            ],
+                          ),
 
+                        SizedBox(height: 20),
                           
                           Column(
                             
@@ -303,12 +361,7 @@ FirestoreService service = FirestoreService();
                                 padding: const EdgeInsets.fromLTRB(40, 0, 40, 10),
                                 child: TextFormField(
                                   controller: _casController,
-                                  obscureText: "Cas" == 'Password' ? true : false,
-                                  // this can be changed based on usage -
-                                  // such as - onChanged or onFieldSubmitted
-                                  onChanged: (value) {
-                                  //  demandeProvider.changeCas(value);
-                                  },
+                                  
                                   style: TextStyle(
                                       fontSize: 18,
                                       color: Color(0xff0962ff),
@@ -362,12 +415,7 @@ FirestoreService service = FirestoreService();
                                 padding: const EdgeInsets.fromLTRB(40, 0, 40, 10),
                                 child: TextFormField(
                                   controller: _departementController,
-                                  obscureText: "Departement" == 'Password' ? true : false,
-                                  // this can be changed based on usage -
-                                  // such as - onChanged or onFieldSubmitted
-                                  onChanged: (value) {
-                                  //  demandeProvider.changeDepartement(value);
-                                  },
+                                  
                                   style: TextStyle(
                                       fontSize: 18,
                                       color: Color(0xff0962ff),
@@ -398,64 +446,11 @@ FirestoreService service = FirestoreService();
                               //
                             ],
                           ),
-                          Column(
-                            
-                            children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 50.0, bottom: 8),
-                                  child: Text(
-                                    "Image",
-                                    style: TextStyle(
-                                      fontFamily: 'Product Sans',
-                                      fontSize: 15,
-                                      color: Color(0xff8f9db5),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              //
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(40, 0, 40, 10),
-                                child: TextFormField(
-                                  controller: _imageController,
-                                  obscureText: "image" == 'Password' ? true : false,
-                                  // this can be changed based on usage -
-                                  // such as - onChanged or onFieldSubmitted
-                                  onChanged: (value) {
-                                   //demandeProvider.changeImage(value);
-                                  },
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      color: Color(0xff0962ff),
-                                      fontWeight: FontWeight.bold),
-                                  decoration: InputDecoration(
-                                    hintText: "Image",
-                                    hintStyle: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.grey[350],
-                                        fontWeight: FontWeight.w600),
-                                    contentPadding:
-                                        EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                                    focusColor: Color(0xff0962ff),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(color: Color(0xff0962ff)),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(
-                                        color: Colors.grey[350],
-                                      ),
-                                    ),
-                                    
-                                  ),
-                                ),
-                              ),
-                              //
-                            ],
-                          ),
+                        /*  IconButton(
+                            icon: Icon(Icons.image),
+                            onPressed: () => uploadImage(_emailController.text),
+                          ),*/
+                         
                       //
                       SizedBox(
                         height: 15,
@@ -470,7 +465,7 @@ FirestoreService service = FirestoreService();
                       ),
                       //
                       Text(
-                        "ICI du blabla pour parler des regles ",
+                        "Validez votre demande et attendez votre reponse ",
                         style: TextStyle(
                           fontFamily: 'Product Sans',
                           fontSize: 15.5,
@@ -509,59 +504,58 @@ FirestoreService service = FirestoreService();
                           String _cas = _casController.text;
                           String _departement = _departementController.text;
                           String _image = _imageController.text;
-                          _demande = new Demande(name:_name, email: _email, password: _password, cas: _cas, departement: _departement, image: _image);
+                          _demande = new Demande(name:_name, email: _email, password: _password, cas: _cas, departement: _departement, image: 'non', role: "etudiant", anniv: selectedDate);
                           /*addDemande(_demande);
                         demandeProvider.savedemande(_demande);*/
                        // demandeProvider.savedemande();
-                          
-                          print('voila le mail $_demande');
+                       if (_formKey.currentState.validate()){
+                         print('voila le mail $_demande');
                           service.saveDemande(_demande);
-                         Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                         Navigator.pop(context,
+                        MaterialPageRoute(builder: (context) => Connection()),
                           );
-                       }),
+
+                       }
+                        }
+                      ), 
+                            
                       
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'Vous Avez déja un commpte? ',
-                              style: TextStyle(
-                                fontFamily: 'Product Sans',
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xff8f9db5).withOpacity(0.45),
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.pop(context,
+                        MaterialPageRoute(builder: (context) => Connection()),
+                          );
+                        },
+                           child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Vous Avez déja un commpte? ',
+                                style: TextStyle(
+                                  fontFamily: 'Product Sans',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xff8f9db5).withOpacity(0.45),
+                                ),
                               ),
-                            ),
-                            TextSpan(
-                              text: 'Connectez vous',
-                              style: TextStyle(
-                                fontFamily: 'Product Sans',
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xff90b7ff),
-                              ),
-                            )
-                          ],
+                              TextSpan(
+                                
+                                text: 'Connectez vous',
+                                style: TextStyle(
+                                  fontFamily: 'Product Sans',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xff90b7ff),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                       SizedBox(height: 50),
                     ],
                   ),
-                  RaisedButton(
-                    child: Text('touch'),
-                    onPressed: (){
-                      String _name = _nameController.text;
-                          String _email = _emailController.text;
-                          String _password = _passwordController.text;
-                          String _cas = _casController.text;
-                          String _departement = _departementController.text;
-                          String _image = _imageController.text;
-                          _demande = new Demande(name:_name, email: _email, password: _password, cas: _cas, departement: _departement, image: _image, role: 'etudiant' );
-                          
-                      print(_demande.name);
-                    },
-                  ),
+                  
                   
                   ClipPath(
                     clipper: OuterClippedPart(),
@@ -588,6 +582,50 @@ FirestoreService service = FirestoreService();
       )
     ;
   }
+
+
+
+  uploadImage() async {
+    final _storage = FirebaseStorage.instance;
+    final _picker = ImagePicker();
+    PickedFile image;
+
+
+    //Check Permissions
+    await Permission.photos.request();
+
+    var permissionStatus = await Permission.photos.status;
+
+    if (permissionStatus.isGranted){
+      //Select Image
+      image = await _picker.getImage(source: ImageSource.gallery);
+      var file = File(image.path);
+
+      if (image != null){
+        //Upload to Firebase
+        var snapshot = await _storage.ref()
+        .child("folderName/imageName")
+        .putFile(file)
+        .onComplete;
+
+        var downloadUrl = await snapshot.ref.getDownloadURL();
+
+        setState(() {
+          imageUrl = downloadUrl;
+        });
+      } else {
+        print('No Path Received');
+      }
+
+    } else {
+      print('Grant Permissions and try again');
+    }
+
+    
+
+    
+  }
+
 }
 
 
