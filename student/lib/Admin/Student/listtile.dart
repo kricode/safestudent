@@ -1,29 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:projet/Admin/Student/ajouterEtudiant.dart';
-import 'package:projet/Database/FirestoreService.dart';
 import 'package:projet/modals/Demande.dart';
-import 'package:provider/provider.dart';
-import './listtile.dart';
+import 'package:projet/Database/FirestoreService.dart';
+import 'package:projet/Database/AuthService.dart';
 
-class DemandesList extends StatelessWidget {
-  const DemandesList({Key key}) : super(key: key);
+class ListTilePage extends StatefulWidget {
+  final Demande demande;
+  ListTilePage({this.demande});
+  
+  @override
+  _ListTilePageState createState() => _ListTilePageState();
+}
 
+class _ListTilePageState extends State<ListTilePage> {
+  FirestoreService service =FirestoreService();
   @override
   Widget build(BuildContext context) {
-List userList = Provider.of<List<Demande>>(context);
-    FirestoreService service = FirestoreService();
-
     return Scaffold(
-       appBar: AppBar(
-        backgroundColor: Colors.amber,
-        title: Text('Stream Provider'),
+      appBar: AppBar(
+        title:Text("ff"),
+        centerTitle:true,
+        backgroundColor:Color(0xFF9578CD),
       ),
-      body: userList != null? ListView.builder(
-        
-        itemCount: userList.length,
-        itemBuilder: (_, int index) => Padding(
-          padding: EdgeInsets.all(10.0),
-          child: SafeArea(
+       body: SafeArea(
         child: SingleChildScrollView(
 
          padding: EdgeInsets.all(4),
@@ -58,13 +56,13 @@ List userList = Provider.of<List<Demande>>(context);
                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                      children:<Widget>[
                                Text(
-                                "\t ${userList[index].name}",
+                                "\t ${widget.demande.name}",
                                 style: TextStyle(fontWeight: FontWeight.w100,fontSize: 20,
                                           fontFamily: 'Cardo'),
                               ),
                               SizedBox(height:8),
                              Text(
-                                "\t ${userList[index].email}",
+                                "\t ${widget.demande.departement}",
                                 style: TextStyle(fontWeight: FontWeight.w100,fontSize: 20,
                                           fontFamily: 'Cardo'),
                               ),
@@ -85,7 +83,7 @@ List userList = Provider.of<List<Demande>>(context);
                                     child: RaisedButton( shape: StadiumBorder(),
                                                   color: Colors.green[100],
                                                   onPressed: () {
-                                                    service.validerDemande(userList[index]);
+                                                    service.validerDemande(widget.demande);
 
                                                   },
                                                   child: Text("Ajouter"),
@@ -101,7 +99,7 @@ List userList = Provider.of<List<Demande>>(context);
                                                       shape: StadiumBorder(),
                                                       color: Colors.red[100],
                                                       onPressed: () {
-                                                        service.removeDemande(userList[index].email);
+                                                        service.removeDemande(widget.demande.email);
                                                       },
                                                       child: Text("Supprimer"),
                                                     ),
@@ -120,34 +118,10 @@ List userList = Provider.of<List<Demande>>(context);
                                     ),
         ),
         ),
-        ),
-      ) : Center(
-        child: Column(
-          children: [
-            
-            Container(
-              child: Image(image:AssetImage('assets/images/noresult.jpg')),
-            ),
-            SizedBox(height: 30),
-            Text('Aucune Demande Pour Le Moment',style: TextStyle(
-                                      fontSize: 18,
-                                      color: Color(0xff0962ff),
-                                      fontWeight: FontWeight.bold),)
-          ],
-        ),
-      ),
-       floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          
-          
-            Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => AjoutetudiantPage()),
-                          );
-        },
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
       
     );
   }
 }
+
+
+

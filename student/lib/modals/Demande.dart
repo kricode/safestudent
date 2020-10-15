@@ -11,8 +11,9 @@ class Demande{
   String departement;
   String image;
   String role;
+  String numero;
 
-  Demande({this.id ,this.name, this.email, this.password, this.cas, this.departement, this.image, this.role, this.anniv});
+  Demande({this.id ,this.name, this.email, this.password, this.cas, this.departement, this.image, this.role, this.anniv, this.numero});
 
    
   
@@ -26,7 +27,8 @@ class Demande{
     'departement': departement,
     'image': image,
     'role' : role,
-    'anniv' : anniv
+    'anniv' : anniv,
+    'numero' : numero
    
     };
   }
@@ -40,7 +42,8 @@ class Demande{
         departement = firestore['departement'],
         image = firestore['image'],
         role = firestore['role'],
-        anniv = firestore['anniv']
+        anniv = firestore['anniv'],
+        numero = firestore['numero']
         ;
 }
 

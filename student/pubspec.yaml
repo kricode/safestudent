@@ -81,6 +81,8 @@ flutter:
    - assets/images/icons8-utilisateur-96.png
    - assets/images/etudiant2.png
    - assets/images/doctor.png
+   - assets/images/icon.png
+   - assets/images/noresult.jpg
    
   #   - images/a_dot_ham.jpeg
 

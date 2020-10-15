@@ -4,6 +4,8 @@ import 'package:projet/Database/AuthService.dart';
 import 'package:projet/Database/FirestoreService.dart';
 import 'package:projet/modals/Etudiant.dart';
 import 'package:projet/modals/utilisateur.dart';
+import 'package:flutter/services.dart';
+
 
 
 
@@ -23,7 +25,7 @@ class _AjoutetudiantPageState extends State<AjoutetudiantPage> {
      String _password;
       String _departement;
         String _cas;
-        String _image;
+        String _numero;
         FirestoreService service = FirestoreService();
           bool isLoading = false;
 
@@ -178,7 +180,7 @@ class _AjoutetudiantPageState extends State<AjoutetudiantPage> {
               );
   
       }
-        Widget _buildDepartement(){
+      Widget _buildDepartement(){
            return Column(
              mainAxisAlignment: MainAxisAlignment.start,
              children: [
@@ -217,6 +219,55 @@ class _AjoutetudiantPageState extends State<AjoutetudiantPage> {
 
         return null;
       },
+      onSaved: (String value) {
+        _departement = value;
+      },
+                ),
+             ],
+           );
+      }
+        Widget _buildNumero(){
+           return Column(
+             mainAxisAlignment: MainAxisAlignment.start,
+             children: [
+               Padding(
+                                padding: const EdgeInsets.only(left: 10.0, bottom: 8),
+                                child: Text(
+                                  "Numero de contact",
+                                  style: TextStyle(
+                                    fontFamily: 'Product Sans',
+                                    fontSize: 15,
+                                    color: Color(0xff8f9db5),
+                                  ),
+                                ),
+                              ),
+               TextFormField(
+                 keyboardType: TextInputType.number,
+                                                              inputFormatters: <TextInputFormatter>[
+                                                      FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10),
+                                                  ], 
+                  decoration: InputDecoration(labelText:"Numero:",
+                  
+                   contentPadding:
+                                          EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                                      focusColor: Color(0xff0962ff),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                        
+                                        borderSide: BorderSide(color: Color(0xff0962ff),),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                        borderSide: BorderSide(
+                                          color: Colors.grey[350],
+                                        ),
+                                      ),),
+               
+      validator: (val) {
+                              return val.length == 10  
+                                  ? null
+                                  : "Entrez Un Numero Valide";
+                            },
       onSaved: (String value) {
         _departement = value;
       },
@@ -296,6 +347,8 @@ class _AjoutetudiantPageState extends State<AjoutetudiantPage> {
              SizedBox(height: 20,),
             _buildDepartement(),
              SizedBox(height: 20,),
+             _buildNumero(),
+             SizedBox(height: 20,),
               _buildMaladie(),
             SizedBox(
             height: 25.0,
@@ -328,7 +381,7 @@ class _AjoutetudiantPageState extends State<AjoutetudiantPage> {
                           ),
                             onTap: (){
           etudiant = new Etudiant(name:_name, email: _email, password: _password, cas: _cas, departement: _departement, image: 'non',);
-          
+          print(_email);
                     singUp();
                       
                     } ,

@@ -54,6 +54,9 @@ Future<void> saveUser(uti utilisateur) {
     return _db.collection('Demandes').doc(demandeemail).delete();
   }
 
+Future<void> removeStudent(String studentEmail){
+    return _db.collection('Etudiants').doc(studentEmail).delete();
+  }
 
 //Recuperation  de la liste des docteurs:
  Stream<List<Demande>> getDoctorList() {

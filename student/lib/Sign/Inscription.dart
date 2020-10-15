@@ -4,8 +4,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:projet/Database/FirestoreService.dart';
 import 'package:projet/Sign/connection.dart';
-import '../acceuilEtudiant/main.dart';
+
 import '../modals/Demande.dart';
+import 'package:flutter/services.dart';
+
 import 'dart:io';
 
 
@@ -50,6 +52,7 @@ FirestoreService service = FirestoreService();
    TextEditingController _casController = TextEditingController();
    TextEditingController _departementController = TextEditingController();
    TextEditingController _imageController = TextEditingController();
+   TextEditingController _numberController = TextEditingController();
   
     String imageUrl;
      
@@ -145,11 +148,13 @@ Future<void> _selectDate(BuildContext context) async {
                                   controller:  _nameController,
                                   
                                   style: TextStyle(
+                                     
                                     
                                       fontSize: 18,
                                       color: Color(0xff0962ff),
                                       fontWeight: FontWeight.bold),
                                   decoration: InputDecoration(
+                                    prefixIcon: Icon(Icons.person),
                                     hintText: "Toumi",
                                     hintStyle: TextStyle(
                                         fontSize: 16,
@@ -204,13 +209,14 @@ Future<void> _selectDate(BuildContext context) async {
                                         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                     .hasMatch(val)
                                 ? null
-                                : "Please Enter Correct Email";
+                                : "Veuillez entrer un email valide";
                           },
                                   style: TextStyle(
                                       fontSize: 18,
                                       color: Color(0xff0962ff),
                                       fontWeight: FontWeight.bold),
                                   decoration: InputDecoration(
+                                    prefixIcon: Icon(Icons.alternate_email),
                                     hintText: "Abdelkrim@email.com",
                                     hintStyle: TextStyle(
                                         fontSize: 16,
@@ -270,6 +276,7 @@ Future<void> _selectDate(BuildContext context) async {
                                       color: Color(0xff0962ff),
                                       fontWeight: FontWeight.bold),
                                   decoration: InputDecoration(
+                                    prefixIcon: Icon(Icons.vpn_key),
                                     hintText: "*************",
                                     hintStyle: TextStyle(
                                         fontSize: 16,
@@ -313,26 +320,26 @@ Future<void> _selectDate(BuildContext context) async {
                                 ),
                               ),
                               Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text("${selectedDate.toLocal()}".split(' ')[0], style:  TextStyle(
-                                      fontFamily: 'Product Sans',
-                                      fontSize: 15,
-                                      color: Color(0xff8f9db5),
-                                    ),),
-            SizedBox(height: 20.0,),
-            RaisedButton(
-                color: Color(0xff0962ff),
-              
-              onPressed: () => _selectDate(context),
-              child: Text('Selectionner', style: TextStyle(
-                                      fontFamily: 'Product Sans',
-                                      fontSize: 15,
-                                      color: Colors.white
-                                    ),),
-            ),
-          ],
-        ),
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Text("${selectedDate.toLocal()}".split(' ')[0], style:  TextStyle(
+                                                                fontFamily: 'Product Sans',
+                                                                fontSize: 15,
+                                                                color: Color(0xff8f9db5),
+                                                              ),),
+                                      SizedBox(height: 20.0,),
+                                      RaisedButton(
+                                          color: Color(0xff0962ff),
+                                        
+                                        onPressed: () => _selectDate(context),
+                                        child: Text('Selectionner', style: TextStyle(
+                                                                fontFamily: 'Product Sans',
+                                                                fontSize: 15,
+                                                                color: Colors.white
+                                                              ),),
+                                      ),
+                                    ],
+                                  ),
                               //
                             ],
                           ),
@@ -452,6 +459,70 @@ Future<void> _selectDate(BuildContext context) async {
                           ),*/
                          
                       //
+                      Column(
+                            
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 50.0, bottom: 8),
+                                  child: Text(
+                                    "Cas",
+                                    style: TextStyle(
+                                      fontFamily: 'Product Sans',
+                                      fontSize: 15,
+                                      color: Color(0xff8f9db5),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              //
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(40, 0, 40, 10),
+                                child: TextFormField(
+                                  keyboardType: TextInputType.number,
+                                                              inputFormatters: <TextInputFormatter>[
+                                                      FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10),
+                                                  ], 
+                                  
+                                  validator: (val) {
+                              return val.length == 10  
+                                  ? null
+                                  : "Entrez Un Numero Valide";
+                            },
+                                  controller: _numberController,
+                                  
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Color(0xff0962ff),
+                                      fontWeight: FontWeight.bold),
+                                  decoration: InputDecoration(
+                                    prefixIcon: Icon(Icons.phone),
+                                    hintText: "*************",
+                                    hintStyle: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey[350],
+                                        fontWeight: FontWeight.w600),
+                                    contentPadding:
+                                        EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                    focusColor: Color(0xff0962ff),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(color: Color(0xff0962ff)),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(
+                                        color: Colors.grey[350],
+                                      ),
+                                    ),
+                                    
+                                  ),
+                                ),
+                              ),
+                              //
+                            ],
+                          ),
                       SizedBox(
                         height: 15,
                       ),
@@ -504,7 +575,7 @@ Future<void> _selectDate(BuildContext context) async {
                           String _cas = _casController.text;
                           String _departement = _departementController.text;
                           String _image = _imageController.text;
-                          _demande = new Demande(name:_name, email: _email, password: _password, cas: _cas, departement: _departement, image: 'non', role: "etudiant", anniv: selectedDate);
+                          _demande = new Demande(name:_name, email: _email, password: _password, cas: _cas, departement: _departement, image: 'non', role: "etudiant", anniv: selectedDate, numero: _numberController.text);
                           /*addDemande(_demande);
                         demandeProvider.savedemande(_demande);*/
                        // demandeProvider.savedemande();

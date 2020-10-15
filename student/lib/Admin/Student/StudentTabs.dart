@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projet/Admin/Student/ajouterEtudiant.dart';
 import './StudentDemandes.dart';
 import './StudentList.dart';
 
@@ -27,7 +28,16 @@ class Tabs extends StatelessWidget {
       children: _tabpages,
     ),
 
-
+    floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          
+            Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AjoutetudiantPage()),
+                          );
+        },
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
+      ),
 
     );
   }

@@ -77,10 +77,28 @@ class _ConnectionState extends State<Connection> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 40.0, top: 40),
                         child: Text(
-                          'Bienvenue',
+                          'Safe Student',
                           style: TextStyle(
+                            fontStyle: FontStyle.italic,
                             fontFamily: 'Cardo',
                             fontSize: 35,
+                            color: Colors.blue[100],
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                        //
+                      ),
+                    ),
+                    SizedBox(height: 50),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 40.0, top: 40),
+                        child: Text(
+                          'Connectez vous',
+                          style: TextStyle(
+                            fontFamily: 'Cardo',
+                            fontSize: 25,
                             color: Color(0xff0C2551),
                             fontWeight: FontWeight.w900,
                           ),
@@ -91,22 +109,11 @@ class _ConnectionState extends State<Connection> {
                    
                     //
                     SizedBox(
-                      height: 100,
+                      height: 50,
                     ),
                     //
                     
-                    //
-
-                    SizedBox(
-                      height: 30,
-                    ),
-                    //
-
-                    //
-                    SizedBox(
-                      height: 15,
-                    ),
-                    //
+                    
                       Column(
                             
                             children: [
@@ -142,6 +149,7 @@ class _ConnectionState extends State<Connection> {
                                       color: Color(0xff0962ff),
                                       fontWeight: FontWeight.bold),
                                   decoration: InputDecoration(
+                                    prefixIcon: Icon(Icons.alternate_email),
                                     hintText: "Abdelkrim@email.com",
                                     hintStyle: TextStyle(
                                         fontSize: 16,
@@ -207,6 +215,7 @@ class _ConnectionState extends State<Connection> {
                                       color: Color(0xff0962ff),
                                       fontWeight: FontWeight.bold),
                                   decoration: InputDecoration(
+                                    prefixIcon: Icon(Icons.vpn_key),
                                     hintText: "*************",
                                     hintStyle: TextStyle(
                                         fontSize: 16,
