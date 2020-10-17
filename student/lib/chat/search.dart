@@ -46,8 +46,8 @@ class _SearchState extends State<Search> {
         itemBuilder: (context, index){
         return userTile(
           
-          searchResultSnapshot.docs[index].get(["name"]),
-          searchResultSnapshot.docs[index].get(["email"]),
+          searchResultSnapshot.docs[index].get('name'),
+          searchResultSnapshot.docs[index].get('email'),
         );
         }) : Container();
   }
@@ -108,7 +108,7 @@ class _SearchState extends State<Search> {
                   color: Colors.blue,
                   borderRadius: BorderRadius.circular(24)
               ),
-              child: Text("Message",
+              child: Text("Discuter",
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 16

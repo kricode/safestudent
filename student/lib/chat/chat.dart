@@ -27,8 +27,8 @@ class _ChatState extends State<Chat> {
           itemCount: snapshot.data.documents.length,
             itemBuilder: (context, index){
               return MessageTile(
-                message: snapshot.data.documents[index].data["message"],
-                sendByMe: Constants.myName == snapshot.data.documents[index].data["sendBy"],
+                message: snapshot.data.documents[index].data()["message"],
+                sendByMe: Constants.myName == snapshot.data.documents[index].data()["sendBy"],
               );
             }) : Container();
       },

@@ -29,11 +29,11 @@ class _ChatRoomState extends State<ChatRoom> {
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return ChatRoomsTile(
-                    name: snapshot.data.documents[index].data['chatRoomId']
+                    name: snapshot.data.documents[index].data()['chatRoomId']
                         .toString()
                         .replaceAll("_", "")
                         .replaceAll(widget.actuel['name'], ""),
-                    chatRoomId: snapshot.data.documents[index].data["chatRoomId"],
+                    chatRoomId: snapshot.data.documents[index].data()["chatRoomId"],
                   );
                 })
             : Container();
