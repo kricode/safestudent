@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import '../Sign/connection.dart';
 
 class ChatRoom extends StatefulWidget {
+  final dynamic actuel ;
+  ChatRoom({this.actuel});
   @override
   _ChatRoomState createState() => _ChatRoomState();
 }
@@ -27,10 +29,10 @@ class _ChatRoomState extends State<ChatRoom> {
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return ChatRoomsTile(
-                    userName: snapshot.data.documents[index].data['chatRoomId']
+                    name: snapshot.data.documents[index].data['chatRoomId']
                         .toString()
                         .replaceAll("_", "")
-                        .replaceAll(Constants.myName, ""),
+                        .replaceAll(widget.actuel['name'], ""),
                     chatRoomId: snapshot.data.documents[index].data["chatRoomId"],
                   );
                 })
@@ -42,16 +44,17 @@ class _ChatRoomState extends State<ChatRoom> {
   @override
   void initState() {
     getUserInfogetChats();
+    print(widget.actuel['name']);
     super.initState();
   }
 
   getUserInfogetChats() async {
-    Constants.myName = await HelperFunctions.getUserNameSharedPreference();
-    FirestoreService().getUserChats(Constants.myName).then((snapshots) {
+  
+    FirestoreService().getUserChats(widget.actuel['name'],).then((snapshots) {
       setState(() {
         chatRooms = snapshots;
         print(
-            "we got the data + ${chatRooms.toString()} this is name  ${Constants.myName}");
+            "we got the data + ${chatRooms.toString()} this is name  ${widget.actuel['name']}");
       });
     });
   }
@@ -60,10 +63,7 @@ class _ChatRoomState extends State<ChatRoom> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Image.asset(
-          "assets/images/logo.png",
-          height: 40,
-        ),
+        title: Text('Vos Discussions'),
         elevation: 0.0,
         centerTitle: false,
         actions: [
@@ -86,7 +86,7 @@ class _ChatRoomState extends State<ChatRoom> {
         child: Icon(Icons.search),
         onPressed: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Search()));
+              context, MaterialPageRoute(builder: (context) => Search(data: widget.actuel,)));
         },
       ),
     );
@@ -94,10 +94,10 @@ class _ChatRoomState extends State<ChatRoom> {
 }
 
 class ChatRoomsTile extends StatelessWidget {
-  final String userName;
+  final String name;
   final String chatRoomId;
 
-  ChatRoomsTile({this.userName,@required this.chatRoomId});
+  ChatRoomsTile({this.name,@required this.chatRoomId});
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +120,7 @@ class ChatRoomsTile extends StatelessWidget {
               decoration: BoxDecoration(
                   color: CustomTheme.colorAccent,
                   borderRadius: BorderRadius.circular(30)),
-              child: Text(userName.substring(0, 1),
+              child: Text(name.substring(0, 1),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.white,
@@ -131,7 +131,7 @@ class ChatRoomsTile extends StatelessWidget {
             SizedBox(
               width: 12,
             ),
-            Text(userName,
+            Text(name,
                 textAlign: TextAlign.start,
                 style: TextStyle(
                     color: Colors.white,

@@ -31,7 +31,7 @@ Future<void> validerDemande(Demande demande){
   }
 
 Future<void> saveUser(uti utilisateur) {
-    return (_db.collection('Users').doc(utilisateur.email).set(utilisateur.toMap())..catchError((e) {
+    return (_db.collection('users').doc(utilisateur.email).set(utilisateur.toMap())..catchError((e) {
       print(e.toString());
     }
     
@@ -40,7 +40,15 @@ Future<void> saveUser(uti utilisateur) {
   }
 
 
-  
+   getEtudiantInfo(String email) async {
+    return _db
+        .collection("Etudiants")
+        .where("email", isEqualTo: email)
+        .get()
+        .catchError((e) {
+      print(e.toString());
+    });
+  }
 
   Stream<List<Demande>> getDemandeList() {
     return _db.collection('Demandes')
@@ -83,7 +91,7 @@ Future<void>  searchDoctor(String specialite) {
 //
 //     Dans ce qui va venir j vais faire les fonctions de la messagerie//
 Future<void> addUserInfo(userData) async {
-    _db.collection("Users").add(userData).catchError((e) {
+    _db.collection("users").doc(userData.email).set(userData).catchError((e) {
       print(e.toString());
     });
   }
@@ -91,13 +99,13 @@ Future<void> addUserInfo(userData) async {
     getRol(DocumentSnapshot snapshot) {
     return _db
         .collection("users")
-        .where('email', isEqualTo: snapshot.data())
+        .where('email', isEqualTo: snapshot.data()['email'])
         .get();
   }
 
  getUserInfo(String email) async {
     return _db
-        .collection("users")
+        .collection("Etudiants")
         .where("email", isEqualTo: email)
         .get()
         .catchError((e) {

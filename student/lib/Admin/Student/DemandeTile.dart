@@ -1,24 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:projet/Admin/Student/ajouterEtudiant.dart';
+import 'package:projet/Admin/Student/confirmation.dart';
 import 'package:projet/Database/FirestoreService.dart';
 import 'package:projet/modals/Demande.dart';
+import 'package:projet/modals/Utilisateur.dart';
 import 'package:provider/provider.dart';
+import 'package:projet/Database/AuthService.dart';
+import 'package:projet/modals/Etudiant.dart';
+
+
 import './listtile.dart';
 
 class DemandesList extends StatelessWidget {
-  const DemandesList({Key key}) : super(key: key);
+   DemandesList({Key key}) : super(key: key);
 
+ final FirestoreService service = FirestoreService();
+       final  AuthService authService = new AuthService();
+Etudiant  etudiant ;
   @override
   Widget build(BuildContext context) {
+    
 List userList = Provider.of<List<Demande>>(context);
-    FirestoreService service = FirestoreService();
 
     return Scaffold(
        appBar: AppBar(
         backgroundColor: Colors.amber,
-        title: Text('Stream Provider'),
+        title: Text('Liste Des Demandes'),
       ),
-      body: userList != null? ListView.builder(
+      body: userList != null ? ListView.builder(
         
         itemCount: userList.length,
         itemBuilder: (_, int index) => Padding(
@@ -48,33 +57,37 @@ List userList = Provider.of<List<Demande>>(context);
                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                              crossAxisAlignment: CrossAxisAlignment.center,
                               children:<Widget>[
-                                Row(
-                                  
+                                GestureDetector(
+                                                                  child: Row(
+                                    
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             
-                                 SingleChildScrollView(
-                                                                    child: Row(
-                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                     children:<Widget>[
+                                   SingleChildScrollView(
+                                                                      child: Row(
+                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                       children:<Widget>[
                                Text(
-                                "\t ${userList[index].name}",
-                                style: TextStyle(fontWeight: FontWeight.w100,fontSize: 20,
-                                          fontFamily: 'Cardo'),
+                                  "\t ${userList[index].name}",
+                                  style: TextStyle(fontWeight: FontWeight.w100,fontSize: 20,
+                                            fontFamily: 'Cardo'),
                               ),
                               SizedBox(height:8),
-                             Text(
-                                "\t ${userList[index].email}",
-                                style: TextStyle(fontWeight: FontWeight.w100,fontSize: 20,
-                                          fontFamily: 'Cardo'),
-                              ),
+                             
                                SizedBox(height: 4,),
-                                     ],
-                                     
-                                   ),
-                                 ) ,
+                                       ],
+                                       
+                                     ),
+                                   ) ,
                               ],
-                            ),   
+                            ),
+
+                            onTap: (){
+                               Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => ConfirmationPage(demande: userList[index]),
+                          ));
+                            },
+                                ),   
                                 
                                       
                                                                     
@@ -85,7 +98,14 @@ List userList = Provider.of<List<Demande>>(context);
                                     child: RaisedButton( shape: StadiumBorder(),
                                                   color: Colors.green[100],
                                                   onPressed: () {
+                                                   uti  utilisateur = new uti(name: userList[index].name, email: userList[index].email, role: 'etudiant', password: userList[index].password);
+
+                                                    service.saveUser(utilisateur);
                                                     service.validerDemande(userList[index]);
+                                                    singUp(userList[index].name.toString(), userList[index].email.toString(), userList[index].password.toString() ).then(
+                                                     // service.removeDemande(userList[index].email)
+                                                    );
+
 
                                                   },
                                                   child: Text("Ajouter"),
@@ -149,5 +169,29 @@ List userList = Provider.of<List<Demande>>(context);
       ),
       
     );
+  }
+  singUp(String name, String email, String password) async {
+
+    
+      
+
+      await authService.signUpWithEmailAndPassword(email,
+          password).then((result){
+            if(result != null){
+              service.saveEtudiant(etudiant);
+                
+              Map<String,String> userDataMap = {
+                "name" : name,
+                "email" : email,
+                "role"  : "etudiant"
+              };
+
+              service.addUserInfo(userDataMap);
+
+            
+              
+            }
+      });
+    
   }
 }

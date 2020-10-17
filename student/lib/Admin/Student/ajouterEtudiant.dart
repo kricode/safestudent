@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projet/Admin/main.dart';
 import 'package:projet/Database/AuthService.dart';
@@ -16,6 +17,7 @@ class AjoutetudiantPage extends StatefulWidget {
 }
 
 class _AjoutetudiantPageState extends State<AjoutetudiantPage> {
+  User utif;
    Etudiant etudiant;
    uti utilisateur;
     AuthService authService = new AuthService();
@@ -410,7 +412,7 @@ class _AjoutetudiantPageState extends State<AjoutetudiantPage> {
         isLoading = true;
       });
 
-      await authService.signUpWithEmailAndPassword(_email,
+     utif =  await authService.signUpWithEmailAndPassword(_email,
           _password).then((result){
             if(result != null){
               service.saveEtudiant(etudiant);

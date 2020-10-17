@@ -17,6 +17,6 @@ class StudentDemandes extends StatelessWidget {
     return StreamProvider(
         create: (BuildContext context) => firebaseServices.getDemandeList(),
          //child: iteminscription(),
-         child: DemandesList());
+         child: MaterialApp(home: DemandesList()));
   }
 }

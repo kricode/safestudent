@@ -1,4 +1,6 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Demande{
   
 
@@ -6,7 +8,7 @@ class Demande{
   String name;
   String email;
   String password;
-  DateTime anniv;
+  Timestamp anniv;
   String cas;
   String departement;
   String image;

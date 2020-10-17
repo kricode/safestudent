@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projet/Database/FirestoreService.dart';
 import 'package:projet/helper/helperfunctions.dart';
 import 'package:projet/redirect.dart';
+import 'package:projet/test.dart';
 import './Inscription.dart';
 import '../acceuilEtudiant/main.dart';
 import '../Database/AuthService.dart';
@@ -17,9 +19,8 @@ class Connection extends StatefulWidget {
 
 class _ConnectionState extends State<Connection> {
 
-
+User utilisateur;
     AuthService authService = AuthService();
-   
    final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
@@ -32,18 +33,25 @@ class _ConnectionState extends State<Connection> {
         isLoading = true;
       });
 
-      await authService
+   utilisateur =      await authService
           .signInWithEmailAndPassword(
               _emailController.text, _passwordController.text)
           .then((result) async {
         if (result != null)  {
           QuerySnapshot userInfoSnapshot =
               await FirestoreService().getUserInfo(_emailController.text);
+             
+             /*  HelperFunctions.saveUserLoggedInSharedPreference(true);
+          HelperFunctions.saveUserNameSharedPreference(
+              userInfoSnapshot.docs[0].data()['name']);
+          HelperFunctions.saveUserEmailSharedPreference(
+              userInfoSnapshot.docs[0].data()['email']);*/
+
 
          
 
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => HomeScreen()));
+       return    Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => Redirect()));
         } else {
           print ('cet utilisateur existe pas');
         }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -55,7 +56,7 @@ FirestoreService service = FirestoreService();
    TextEditingController _numberController = TextEditingController();
   
     String imageUrl;
-     
+      
 Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
@@ -467,7 +468,7 @@ Future<void> _selectDate(BuildContext context) async {
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 50.0, bottom: 8),
                                   child: Text(
-                                    "Cas",
+                                    "Numero De Contact D'urgence",
                                     style: TextStyle(
                                       fontFamily: 'Product Sans',
                                       fontSize: 15,
@@ -575,7 +576,8 @@ Future<void> _selectDate(BuildContext context) async {
                           String _cas = _casController.text;
                           String _departement = _departementController.text;
                           String _image = _imageController.text;
-                          _demande = new Demande(name:_name, email: _email, password: _password, cas: _cas, departement: _departement, image: 'non', role: "etudiant", anniv: selectedDate, numero: _numberController.text);
+                          _demande = new Demande(name:_name, email: _email, password: _password, cas: _cas, departement: _departement, image: 'non', role: "etudiant", anniv: Timestamp.fromMicrosecondsSinceEpoch(selectedDate.microsecondsSinceEpoch)
+, numero: _numberController.text);
                           /*addDemande(_demande);
                         demandeProvider.savedemande(_demande);*/
                        // demandeProvider.savedemande();

@@ -16,7 +16,7 @@ class uti{
           
   Map<String,dynamic> toMap(){
     return {
-     
+    'name' : name,     
     'email': email,
     'password': password,
     'role': role,

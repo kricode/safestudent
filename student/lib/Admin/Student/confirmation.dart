@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:projet/Database/FirestoreService.dart';
+import 'package:projet/Database/AuthService.dart';
+
 import 'package:projet/modals/Demande.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+import 'package:projet/modals/Etudiant.dart';
+import 'package:projet/modals/Utilisateur.dart';
 
 class ConfirmationPage extends StatefulWidget{
-  final Demande demande;
+  final dynamic demande;
   ConfirmationPage({this.demande});
   @override
   _ConfirmationPageState  createState()=> _ConfirmationPageState();
   }
   class _ConfirmationPageState extends State<ConfirmationPage> {
     FirestoreService service = FirestoreService();
+        AuthService authService = new AuthService();
+Etudiant  etudiant ;
+uti utilisateur;
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +104,7 @@ class ConfirmationPage extends StatefulWidget{
                            
                             children:<Widget>[
                              Text(
-                              "Nom&Prénom",
+                              "Nom & Prénom",
                               textAlign: TextAlign.left,
                               style: TextStyle(fontWeight: FontWeight.w100),
                             ),
@@ -242,7 +249,18 @@ class ConfirmationPage extends StatefulWidget{
                               ),
                                 ),
                                 onTap: (){
+                          utilisateur = new uti(name: widget.demande.name, email: widget.demande.email, role: 'etudiant', password: widget.demande.password);
                                   service.validerDemande(widget.demande);
+
+                                  service.saveUser(utilisateur);
+                                  
+                                  singUp();
+                               //  service.removeDemande(widget.demande.email);
+                                 // uti utilisateur;
+                                 // utilisateur = uti(email: widget.demande.email, password: widget.demande.password, role: 'etudiant');
+                                 // service.saveUser(utilisateur); 
+
+                                  
 
 
                                 } ,
@@ -295,8 +313,32 @@ class ConfirmationPage extends StatefulWidget{
     );
 
          }
+  
        
-         
+         singUp() async {
+
+    
+      
+
+      await authService.signUpWithEmailAndPassword(widget.demande.email.toString(),
+          widget.demande.password.toString()).then((result){
+            if(result != null){
+              service.saveEtudiant(etudiant);
+                
+              Map<String,String> userDataMap = {
+                "name" : widget.demande.name,
+                "email" : widget.demande.email,
+                "role"  : "etudiant"
+              };
+
+              service.addUserInfo(userDataMap);
+
+            
+              
+            }
+      });
+    
+  }
     
 }
 

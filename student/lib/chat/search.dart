@@ -7,6 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Search extends StatefulWidget {
+  final dynamic data;
+  Search({this.data});
   @override
   _SearchState createState() => _SearchState();
 }
@@ -28,7 +30,7 @@ class _SearchState extends State<Search> {
       await databaseMethods.searchByName(searchEditingController.text)
           .then((snapshot){
         searchResultSnapshot = snapshot;
-        print("$searchResultSnapshot");
+        print(" $searchResultSnapshot");
         setState(() {
           isLoading = false;
           haveUserSearched = true;
@@ -43,17 +45,18 @@ class _SearchState extends State<Search> {
       itemCount: searchResultSnapshot.docs.length,
         itemBuilder: (context, index){
         return userTile(
-          searchResultSnapshot.docs[index].get(["userName"]),
-          searchResultSnapshot.docs[index].get(["userEmail"]),
+          
+          searchResultSnapshot.docs[index].get(["name"]),
+          searchResultSnapshot.docs[index].get(["email"]),
         );
         }) : Container();
   }
 
   /// 1.create a chatroom, send user to the chatroom, other userdetails
-  sendMessage(String userName){
-    List<String> users = [Constants.myName,userName];
+  sendMessage(String name){
+    List<String> users = [widget.data['name'],name];
 
-    String chatRoomId = getChatRoomId(Constants.myName,userName);
+    String chatRoomId = getChatRoomId(widget.data['name'],name);
 
     Map<String, dynamic> chatRoom = {
       "users": users,
@@ -70,7 +73,7 @@ class _SearchState extends State<Search> {
 
   }
 
-  Widget userTile(String userName,String userEmail){
+  Widget userTile(String name,String email){
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       child: Row(
@@ -79,14 +82,14 @@ class _SearchState extends State<Search> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                userName,
+                name,
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 16
                 ),
               ),
               Text(
-                userEmail,
+                email,
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 16
@@ -97,7 +100,7 @@ class _SearchState extends State<Search> {
           Spacer(),
           GestureDetector(
             onTap: (){
-              sendMessage(userName);
+              sendMessage(name);
             },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 12,vertical: 8),
@@ -128,6 +131,7 @@ class _SearchState extends State<Search> {
 
   @override
   void initState() {
+    print('we got the object ${widget.data['name']}');
     super.initState();
   }
 
@@ -146,7 +150,7 @@ class _SearchState extends State<Search> {
           children: [
             Container(
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              color: Color(0x54FFFFFF),
+              color: Colors.blue[100],
               child: Row(
                 children: [
                   Expanded(
@@ -154,12 +158,12 @@ class _SearchState extends State<Search> {
                       controller: searchEditingController,
                       style: simpleTextStyle(),
                       decoration: InputDecoration(
-                        hintText: "search username ...",
+                        hintText: "search name ...",
                         hintStyle: TextStyle(
-                          color: Colors.white,
+                          color: Colors.black12,
                           fontSize: 16,
                         ),
-                        border: InputBorder.none
+                       
                       ),
                     ),
                   ),
@@ -184,6 +188,7 @@ class _SearchState extends State<Search> {
                         padding: EdgeInsets.all(12),
                         child: Image.asset("assets/images/search_white.png",
                           height: 25, width: 25,)),
+                      
                   )
                 ],
               ),

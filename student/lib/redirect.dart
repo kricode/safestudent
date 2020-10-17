@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:projet/DoctorUi/doctoracceuil.dart';
+import 'package:projet/Sign/connection.dart';
 import './admin/main.dart';
 import './acceuilEtudiant/main.dart';
 
@@ -8,17 +10,20 @@ import './acceuilEtudiant/main.dart';
 
 class Redirect extends StatefulWidget {
 
-  User user;
-  Redirect({Key key, this.user}) : super(key: key);
+
+  Redirect({Key key}) : super(key: key);
 
   _RedirectState createState() => _RedirectState();
 }
+
+FirebaseAuth auth = FirebaseAuth.instance;
+
 
 class _RedirectState extends State<Redirect> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(
-      stream:  FirebaseFirestore.instance.collection('users').doc(widget.user.email).snapshots(),
+      stream:  FirebaseFirestore.instance.collection('users').doc(auth.currentUser.email).snapshots(),
       builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
         if (snapshot.hasError){
           return Text ('Error: ${snapshot.error}');
@@ -26,17 +31,26 @@ class _RedirectState extends State<Redirect> {
         switch (snapshot.connectionState){
           case ConnectionState.waiting: return Text('loading');
           default: 
-          return Text(snapshot.data['name']);
+          return checkRole(snapshot);
         }
       }
     );
   }
-  Widget checkRole(DocumentSnapshot snapshot){
-    if( snapshot.get('role') == 'admin'){
+  Widget checkRole(AsyncSnapshot<DocumentSnapshot> snapshot){
+    
+    if( snapshot.data['role'] == 'admin'){
       return  admin();
     } else{
-      if (snapshot.get('role') == 'etudiant'){
+      if (snapshot.data['role'] == 'etudiant'){
         return  HomeScreen();     }
+        else{
+          if(snapshot.data['role']== 'doctor'){
+            return DoctorUi();
+          }
+          else{
+            return Connection();
+          }
+        }
     }
   }
 }

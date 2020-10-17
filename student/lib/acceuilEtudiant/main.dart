@@ -1,7 +1,11 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+import 'package:projet/Database/FirestoreService.dart';
 import '../Sign/connection.dart';
+import '../chat/chatrooms.dart';
 
 import 'package:projet/acceuilEtudiant/assistance.dart';
 
@@ -22,6 +26,9 @@ class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
+FirebaseAuth auth = FirebaseAuth.instance;
+FirestoreService service = FirestoreService();
+String emailuser = auth.currentUser.email;
 
 class _HomeScreenState extends State<HomeScreen> {
  String displaytext="voulez vous vraiment alerter le service hospitalier?";
@@ -63,7 +70,24 @@ class _HomeScreenState extends State<HomeScreen> {
    });
    
  }
-     
+     var donnee;
+       Future<dynamic> getData() async {
+    FirebaseFirestore.instance.collection("Etudiants").doc(emailuser).get().then((value){
+      print(value.data());
+      setState(() {
+       donnee = value;
+      });
+      
+        }
+    );
+    
+  }
+   @override
+  void initState() {
+
+    super.initState();
+    getData();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,7 +128,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                  width:40,
                                  height: 40,
                                                             child: IconButton(
-                                      icon: Image.asset('assets/images/kisspng-start-svg-png-icon-free-download-501746-onlin-5b6a8876ad34f1.8833342315337084067095.png'),
+                                     icon: Icon(Icons.exit_to_app),
+                                     // icon: Image.asset('assets/images/kisspng-start-svg-png-icon-free-download-501746-onlin-5b6a8876ad34f1.8833342315337084067095.png'),
                                 color: Colors.black,
                                 alignment: Alignment.topRight,
                                
@@ -172,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                height: 80,
                                              ),
                                              Text(
-                                               "Alert",
+                                               'Alerter',
                                                textAlign: TextAlign.center,
                                                style: Theme.of(context)
                                                    .textTheme
@@ -228,28 +253,38 @@ class _HomeScreenState extends State<HomeScreen> {
                                            ])),
                                             ),
                                      
-                                            Card(
+                                            GestureDetector(
+                                              
+                                              onTap: (){
+                                                print('u touched doctor');
+                                                 Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(builder: (context) => ChatRoom(actuel: donnee,)),
+                                                      );
+                                              },
+                                         child: Card(
                                        shape: RoundedRectangleBorder(
                                          borderRadius:BorderRadius.circular(12)),
                                          elevation:8,
                                          child: Column(
-                                             mainAxisAlignment:MainAxisAlignment.center,
-                                             children: <Widget>[
-                                             Image.asset(
-                                               "assets/images/icons8-docteur-homme-96.png",
-                                               height: 80,
-                                             ),
-                                             SizedBox(
-                                               height:4),
-                                             Text(
-                                               "Docteur",
-                                               textAlign: TextAlign.center,
-                                               style: Theme.of(context)
-                                                   .textTheme
-                                                   .headline6
-                                                   .copyWith(fontSize: 15),
-                                             )
+                                               mainAxisAlignment:MainAxisAlignment.center,
+                                               children: <Widget>[
+                                               Image.asset(
+                                                 "assets/images/icons8-docteur-homme-96.png",
+                                                 height: 80,
+                                               ),
+                                               SizedBox(
+                                                 height:4),
+                                               Text(
+                                                 "Docteur",
+                                                 textAlign: TextAlign.center,
+                                                 style: Theme.of(context)
+                                                     .textTheme
+                                                     .headline6
+                                                     .copyWith(fontSize: 15),
+                                               )
                                          ])),
+                                            ),
                                             GestureDetector(
                                               onTap: (){
                                                  Navigator.push(

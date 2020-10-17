@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:backdrop/backdrop.dart';
+import 'package:projet/Database/AuthService.dart';
 import 'package:projet/Database/FirestoreService.dart';
+import 'package:projet/Sign/connection.dart';
 import 'package:provider/provider.dart';
 import './widgets/avatar.dart';
 
@@ -24,6 +26,18 @@ int _currentindex = 0;
       appBar: BackdropAppBar(
         backgroundColor: Colors.lightBlueAccent,
         title: Text("Acceuil"),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              AuthService().signOut();
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => Connection()));
+            },
+            child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Icon(Icons.exit_to_app)),
+          )
+        ],
         
       ),
       stickyFrontLayer: true,

@@ -16,15 +16,15 @@ InputDecoration textFieldInputDecoration(String hintText) {
       hintText: hintText,
       hintStyle: TextStyle(color: Colors.white54),
       focusedBorder:
-          UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+          UnderlineInputBorder(borderSide: BorderSide(color: Colors.blue)),
       enabledBorder:
-          UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)));
+          UnderlineInputBorder(borderSide: BorderSide(color: Colors.blueAccent)));
 }
 
 TextStyle simpleTextStyle() {
-  return TextStyle(color: Colors.white, fontSize: 16);
+  return TextStyle(color: Colors.black45, fontSize: 16);
 }
 
 TextStyle biggerTextStyle() {
-  return TextStyle(color: Colors.white, fontSize: 17);
+  return TextStyle(color: Colors.black38, fontSize: 17);
 }

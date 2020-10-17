@@ -1,13 +1,26 @@
-class Point{
-  double x;
-  double y;
+/*import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:async/async.dart';
 
-  Point({this.x, this.y});
 
-  double getX(Point point){
-    return point.x;
-  }
-  double getY(Point point){
-    return point.y;
-  }
+class Test extends StatefulWidget {
+      
+
+  Test({Key key }) : super(key: key);
+
+  _TestState createState() => _TestState();
 }
+
+class _TestState extends State<Test> {
+     
+FirebaseAuth auth = FirebaseAuth.instance;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('email ${auth.currentUser.email} ')) ,
+       body: Text('hey'),
+    );
+  }
+}*/

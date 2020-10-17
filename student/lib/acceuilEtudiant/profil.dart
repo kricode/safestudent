@@ -3,6 +3,8 @@ import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 
 import 'package:projet/acceuilEtudiant/main.dart';
 class Profil extends StatefulWidget{
+  final dynamic profil;
+  Profil({this.profil});
   @override
   _ProfilState  createState()=> _ProfilState();
   }
@@ -47,13 +49,13 @@ class Profil extends StatefulWidget{
                               color: Colors.black,
                               alignment: Alignment.topLeft,
                               padding: EdgeInsets.all(8.0),
-                      
+                            
                 
                             onPressed: (){
                               Navigator.push(
                               context,
                                MaterialPageRoute(builder: (context) => HomeScreen()),
-              );
+                              );
                             },
                             ),
                             ),
@@ -102,7 +104,7 @@ class Profil extends StatefulWidget{
                           ),
                           Expanded(
                               child: Text(
-                            "bouchir yasmina",
+                            widget.profil['name'],
                             textDirection: TextDirection.ltr,
                             textAlign: TextAlign.right,
                             style: TextStyle(fontWeight: FontWeight.w100),
@@ -134,7 +136,7 @@ class Profil extends StatefulWidget{
                           ),
                           Expanded(
                               child: Text(
-                            "bouchir.yasmina@gmail.com",
+                            widget.profil['email'],
                             textDirection: TextDirection.ltr,
                             textAlign: TextAlign.right,
                             style: TextStyle(fontWeight: FontWeight.w100),
@@ -167,7 +169,7 @@ class Profil extends StatefulWidget{
                           ),
                           Expanded(
                               child: Text(
-                            "diabétique",
+                            widget.profil['cas'],
                             textDirection: TextDirection.ltr,
                             textAlign: TextAlign.right,
                             style: TextStyle(fontWeight: FontWeight.w100),
@@ -200,7 +202,7 @@ class Profil extends StatefulWidget{
                           ),
                           Expanded(
                               child: Text(
-                            "Informatique",
+                            widget.profil['departement'],
                             textDirection: TextDirection.ltr,
                             textAlign: TextAlign.right,
                             style: TextStyle(fontWeight: FontWeight.w100),
