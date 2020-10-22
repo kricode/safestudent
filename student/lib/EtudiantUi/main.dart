@@ -3,17 +3,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+import 'package:projet/Database/AuthService.dart';
 import 'package:projet/Database/FirestoreService.dart';
+import 'package:projet/modals/Alerte.dart';
 import '../Sign/connection.dart';
 import '../chat/chatrooms.dart';
+import 'package:location/location.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
+import 'package:projet/EtudiantUi/assistance.dart';
 
-import 'package:projet/acceuilEtudiant/assistance.dart';
-
-import 'package:projet/acceuilEtudiant/profil.dart';
+import 'package:projet/EtudiantUi/profil.dart';
 import 'calendrier.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+     FirestoreService service = FirestoreService();
+ 
+   
+    Location _location;
+    
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -28,14 +36,34 @@ class HomeScreen extends StatefulWidget {
 }
 FirebaseAuth auth = FirebaseAuth.instance;
 FirestoreService service = FirestoreService();
+AuthService serviceauth = AuthService();
 String emailuser = auth.currentUser.email;
 
+String _locationmessage='';
+  FirebaseFirestore _db = FirebaseFirestore.instance;
+
+
+  
+
 class _HomeScreenState extends State<HomeScreen> {
- String displaytext="voulez vous vraiment alerter le service hospitalier?";
+  var location = new Location();
+  Alerte alert;
+  LocationData locationdata;
+    Geoflutterfire geo = Geoflutterfire();
+  String displaytext="voulez vous vraiment alerter le service hospitalier?";
+  _getlocation() async {
+    var pos = await location.getLocation();
+    setState(() {
+     locationdata = pos; 
+    });
+
+   
+    
+  }
  
  final GlobalKey<ScaffoldState> _globalKeyScaffold =  new GlobalKey<ScaffoldState>();
  Future <String>createAlertDialog(BuildContext context){
-  String word ="votre alerte est effectuée";
+  String word ="veuillez ne pas bouger, le SAMU a été alerté";
    return showDialog(context: context,builder:(context){
      return AlertDialog(
                 shape: RoundedRectangleBorder(
@@ -50,6 +78,21 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Color(0xFF9578CD),
               elevation: 3.0,
               onPressed: (){
+                DateTime time =  DateTime.now();
+                _getlocation();
+               GeoFirePoint point = geo.point(latitude: locationdata.latitude, longitude: locationdata.longitude);
+              //  alert = new Alerte(name: donnee['name'], email: donnee['email'], numero: donnee['numero'], temps: Timestamp.fromDate(time), anniv: donnee['anniv'], location: point.data);
+              
+                             // service.saveAlerte(alert);
+                _db.collection('Alertes').doc(donnee['email']).set({ 
+    'name': donnee['name'],
+    'email': donnee['email'],
+    'numero' : donnee['numero'],
+    'temps' : Timestamp.fromDate(time) ,
+    'cas' : donnee['cas'] ,
+    'place' : point.data,
+    'anniv' : donnee['anniv']
+  });
                 Navigator.of(context).pop(word.toString());
               }
             ),
@@ -87,10 +130,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     super.initState();
     getData();
+    _getlocation();
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return donnee != null ? Scaffold(
   
      key: _globalKeyScaffold,
      
@@ -103,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   height: 200,
                   color: Color(0xFF9578CD),
-                  child: Center(child: Text("Safe Student",style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold,fontSize: 25),)),
+                  child: Center(child: Text('Safe Student1',style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold,fontSize: 25),)),
                   
                   
                 ),
@@ -148,6 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         // ignore: missing_required_param
                                         FlatButton(
                                           onPressed: (){
+                                            auth.signOut();
                                     Navigator.push(context
                                      , MaterialPageRoute(builder: (context) => Connection()));
                                         },
@@ -318,7 +363,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               onTap: (){
                                                  Navigator.push(
                               context,
-                               MaterialPageRoute(builder: (context) => Profil()),
+                               MaterialPageRoute(builder: (context) => Profil(profil: donnee,)),
               );},
                                             child:Card(
                                        shape: RoundedRectangleBorder(
@@ -371,6 +416,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                    
                                    
                            
+                         ) : Scaffold(
+                           body: Center(child: Container(
+                             child: CircularProgressIndicator(),
+                           ),)
                          );
   }
   

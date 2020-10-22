@@ -2,13 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projet/Database/FirestoreService.dart';
-import 'package:projet/helper/helperfunctions.dart';
 import 'package:projet/redirect.dart';
-import 'package:projet/test.dart';
 import './Inscription.dart';
-import '../acceuilEtudiant/main.dart';
 import '../Database/AuthService.dart';
-import '../Admin/main.dart';
 
 
 class Connection extends StatefulWidget {

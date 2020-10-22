@@ -15,10 +15,12 @@ class AuthService {
 
   Future signInWithEmailAndPassword(String email, String password) async {
     try {
+      if (email != null){ 
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       User user = result.user;
-      return _userFromFirebaseUser(user);
+      return _userFromFirebaseUser(user);}
+      else return print("ajoutez vos coordonnées");
     } catch (e) {
       print(e.toString());
       return null;
@@ -40,6 +42,7 @@ class AuthService {
   Future resetPass(String email) async {
     try {
       return await _auth.sendPasswordResetEmail(email: email);
+      
     } catch (e) {
       print(e.toString());
       return null;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projet/Admin/Student/Alertes.dart';
 import 'package:projet/Admin/Student/ajouterEtudiant.dart';
 import './StudentDemandes.dart';
 import './StudentList.dart';
@@ -13,19 +14,79 @@ class Tabs extends StatelessWidget {
       StudentList()
       
     ];
-    final _tabs = <Tab>[
+    return DefaultTabController(
+  length: 3,
+  child: MaterialApp(
+    home: Scaffold(
+      appBar: AppBar(
+        bottom: TabBar(
+          onTap: (index) {
+           // Tab index when user select it, it start from zero
+          },
+          tabs: [
+            Tab(icon: Icon(Icons.add_to_queue),text: 'Demandes', ),
+            Tab(icon:Icon(Icons.person),text: 'Etudiants', ),
+           Tab(icon: Icon(Icons.sim_card_alert),text: 'Alertes', )
+
+             
+
+          ],
+        ),
+        title: Text("Etudiants", style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontFamily: 'Cardo',
+                            fontSize: 25,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w200
+                          ),),
+        actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.exit_to_app),
+          onPressed: () {
+            print("you clicked on signout");
+          },
+        )
+      ],
+      ),
+      body: TabBarView(
+        children: [
+          StudentDemandes(),
+          StudentList(),
+          AlertList(),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          
+            Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AjoutetudiantPage()),
+                          );
+        },
+        tooltip: 'Ajouter un Etudiant',
+        child: Icon(Icons.add),
+      ),
+
+    ),
+  ),
+);
+    /*return Scaffold(
+      appBar: TabBar(
+        
+        tabs: [
       Tab(icon: Icon(Icons.add_to_queue),text: 'Demandes', ),
       Tab(icon: Icon(Icons.view_list),text: 'Etudiants', )
 
 
-    ];
-    return Scaffold(
-      appBar: TabBar(
-        tabs: _tabs,
+    ],
       ),
 
     body: TabBarView(
-      children: _tabpages,
+      children: [
+        StudentDemandes(),
+      StudentList()
+      
+
+      ],
     ),
 
     floatingActionButton: FloatingActionButton(
@@ -39,6 +100,6 @@ class Tabs extends StatelessWidget {
         child: Icon(Icons.add),
       ),
 
-    );
+    );*/
   }
 }

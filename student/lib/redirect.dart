@@ -2,9 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projet/DoctorUi/doctoracceuil.dart';
+import 'package:projet/SamuUi.dart/acceuil.dart';
 import 'package:projet/Sign/connection.dart';
 import './admin/main.dart';
-import './acceuilEtudiant/main.dart';
+import './EtudiantUi/main.dart';
 
 
 
@@ -48,7 +49,11 @@ class _RedirectState extends State<Redirect> {
             return DoctorUi();
           }
           else{
-            return Connection();
+              if (snapshot.data['role'] == 'samu'){
+             return AcceuilSamu();    
+           }
+           else{
+                return Connection();}
           }
         }
     }

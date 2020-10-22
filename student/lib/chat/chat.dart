@@ -6,15 +6,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Chat extends StatefulWidget {
+  final String title;
+   final String myname;
   final String chatRoomId;
 
-  Chat({this.chatRoomId});
+  Chat({this.chatRoomId, this.myname, this.title});
 
   @override
   _ChatState createState() => _ChatState();
 }
 
 class _ChatState extends State<Chat> {
+  
 
   Stream<QuerySnapshot> chats;
   TextEditingController messageEditingController = new TextEditingController();
@@ -28,7 +31,7 @@ class _ChatState extends State<Chat> {
             itemBuilder: (context, index){
               return MessageTile(
                 message: snapshot.data.documents[index].data()["message"],
-                sendByMe: Constants.myName == snapshot.data.documents[index].data()["sendBy"],
+                sendByMe: widget.myname == snapshot.data.documents[index].data()["sendBy"],
               );
             }) : Container();
       },
@@ -38,7 +41,7 @@ class _ChatState extends State<Chat> {
   addMessage() {
     if (messageEditingController.text.isNotEmpty) {
       Map<String, dynamic> chatMessageMap = {
-        "sendBy": Constants.myName,
+        "sendBy": widget.myname,
         "message": messageEditingController.text,
         'time': DateTime
             .now()
@@ -53,6 +56,8 @@ class _ChatState extends State<Chat> {
     }
   }
 
+ 
+
   @override
   void initState() {
     FirestoreService().getChats(widget.chatRoomId).then((val) {
@@ -60,14 +65,21 @@ class _ChatState extends State<Chat> {
         chats = val;
       });
     });
+    
+print(widget.myname);
+
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarMain(context),
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
       body: Container(
+        
         child: Stack(
           children: [
             chatMessages(),
@@ -78,7 +90,7 @@ class _ChatState extends State<Chat> {
                   .width,
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-                color: Color(0x54FFFFFF),
+                color: Color(0x3A7A7676),
                 child: Row(
                   children: [
                     Expanded(
@@ -130,6 +142,7 @@ class _ChatState extends State<Chat> {
 }
 
 class MessageTile extends StatelessWidget {
+  
   final String message;
   final bool sendByMe;
 
@@ -167,8 +180,8 @@ class MessageTile extends StatelessWidget {
                 const Color(0xff2A75BC)
               ]
                   : [
-                const Color(0x1AFFFFFF),
-                const Color(0x1AFFFFFF)
+                const Color(0x4A242323),
+                const Color(0x4A5E3F3F)
               ],
             )
         ),

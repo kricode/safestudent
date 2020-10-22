@@ -1,28 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:projet/Database/FirestoreService.dart';
-import 'package:projet/Database/AuthService.dart';
-
-import 'package:projet/modals/Demande.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
-import 'package:projet/modals/Etudiant.dart';
-import 'package:projet/modals/Utilisateur.dart';
 
-class ConfirmationPage extends StatefulWidget{
-  final dynamic demande;
-  ConfirmationPage({this.demande});
-  @override
-  _ConfirmationPageState  createState()=> _ConfirmationPageState();
-  }
-  class _ConfirmationPageState extends State<ConfirmationPage> {
-    FirestoreService service = FirestoreService();
-        AuthService authService = new AuthService();
-Etudiant  etudiant ;
-uti utilisateur;
+class EtudiantInfo extends StatefulWidget {
+  final dynamic etudiant;
+  EtudiantInfo({Key key, this.etudiant}) : super(key: key);
 
+  _EtudiantInfoState createState() => _EtudiantInfoState();
+}
+
+class _EtudiantInfoState extends State<EtudiantInfo> {
+      final snackBarsuppression = SnackBar(content: Text('Vous avez supprimé un Etudiant'));
+
+   FirestoreService service = FirestoreService();
   @override
   Widget build(BuildContext context) {
-    final snackBarsuppression = SnackBar(content: Text('Vous avez supprimé un Etudiant'));
-    final snackbarajout = SnackBar(content: Text('Vous avez ajouté un Etudiant'));
     return Scaffold(
 
          body: SingleChildScrollView  (
@@ -112,7 +104,7 @@ uti utilisateur;
                             ),
                             Expanded(
                                 child: Text(
-                              widget.demande.name,
+                              widget.etudiant.name,
                               textDirection: TextDirection.ltr,
                               textAlign: TextAlign.right,
                               style: TextStyle(fontWeight: FontWeight.w100),
@@ -144,7 +136,7 @@ uti utilisateur;
                             ),
                             Expanded(
                                 child: Text(
-                              widget.demande.email,
+                              widget.etudiant.email,
                               textDirection: TextDirection.ltr,
                               textAlign: TextAlign.right,
                               style: TextStyle(fontWeight: FontWeight.w100),
@@ -177,7 +169,7 @@ uti utilisateur;
                             ),
                             Expanded(
                                 child: Text(
-                              widget.demande.cas,
+                              widget.etudiant.cas,
                               textDirection: TextDirection.ltr,
                               textAlign: TextAlign.right,
                               style: TextStyle(fontWeight: FontWeight.w100),
@@ -210,7 +202,7 @@ uti utilisateur;
                             ),
                             Expanded(
                                 child: Text(
-                              widget.demande.departement,
+                              widget.etudiant.departement,
                               textDirection: TextDirection.ltr,
                               textAlign: TextAlign.right,
                               style: TextStyle(fontWeight: FontWeight.w100),
@@ -221,69 +213,88 @@ uti utilisateur;
                               ),
                        ),
                        SizedBox(height:16,),
-                                 
-              SingleChildScrollView(
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                     children: [
-                       SingleChildScrollView(
-                                                              child: Container(
-                                  
-                                  margin: EdgeInsets.only(left:50.0),
-                                  height: 80,
-                                  width: 110,
-                                  child: IconButton(
-                                    icon: new Image.asset('assets/images/check.png'),
-                                                                  tooltip: 'Valider La Demande',
-                                                                  onPressed: () {
-                                                                  //   utilisateur = new uti(name: widget.demande.name, email: widget.demande.email, role: 'etudiant', password: widget.demande.password);
-                                                                   // service.validerDemande(widget.demande);
-
-                                                                    //service.saveUser(utilisateur);
-                                  
-                                                                     //singUp();
-                                                                  //  service.removeDemande(widget.demande.email);
-                                                                    // uti utilisateur;
-                                                                    // utilisateur = uti(email: widget.demande.email, password: widget.demande.password, role: 'etudiant');
-                                                                    // service.saveUser(utilisateur); 
-                                                                    Scaffold.of(context).showSnackBar(snackbarajout);
-                                                                    Navigator.pop(context);
-
-                                                                    print("you clicked ajout");
-                                                                    
-                                                                  },
-                                  ),
-                              ),
-                                
-                                
-                               ),
-                               SizedBox(
-                                 height:80,
-                               width:100),
-                            GestureDetector(
-                            child: SingleChildScrollView(
-                                                      child: Container(
-                              
-                              margin: EdgeInsets.symmetric(vertical: 20),
-                              height: 65,
-                              width: 100,
-                              child: IconButton(
-                                                                  icon: new Image.asset('assets/images/reject.png'),
-                                                                  tooltip: 'Rejeter La Demande',
-                                                                  onPressed: () {
-                                                                   //service.removeDemande(widget.demande.email);
-                                                                     Navigator.pop(context);
-                                                                     Scaffold.of(context).showSnackBar(snackBarsuppression);
-                                                                    print("you clicked suppression");
-                                                                    
-                                                                  },
+                        Container(
+                          width:300,
+                            height:50.0,
+                            padding: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            color:Colors.white,
+                             borderRadius:BorderRadius.circular(50.0),
+                          
                           ),
+                          child:Row(
+                                
+                                children:<Widget>[
+                                   Icon(Icons.phone_android,color: Colors.grey,),
+                                 
+                                  Text(
+                              "Numero De Contact",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontWeight: FontWeight.w100),
                             ),
+                            Expanded(
+                                child: Text(
+                              widget.etudiant.numero,
+                              textDirection: TextDirection.ltr,
+                              textAlign: TextAlign.right,
+                              style: TextStyle(fontWeight: FontWeight.w100),
+                            ))
+                               
+                                  
+                                ]
+                              ),
                             
-                           ),)
-            ]
-              ),
-               ),
+                          ),
+                          SizedBox(height: 20,),
+                           Container(
+                          width:300,
+                            height:50.0,
+                            padding: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            color:Colors.white,
+                             borderRadius:BorderRadius.circular(50.0),
+                          
+                          ),
+                          child:Row(
+                                
+                                children:<Widget>[
+                                   Icon(Icons.calendar_today,color: Colors.grey,),
+                                 
+                                  Text(
+                              "Date De Naissance",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontWeight: FontWeight.w100),
+                            ),
+                            Expanded(
+                                child: Text(
+                              widget.etudiant.anniv.toDate().toString(),
+                              textDirection: TextDirection.ltr,
+                              textAlign: TextAlign.right,
+                              style: TextStyle(fontWeight: FontWeight.w100),
+                            ))
+                               
+                                  
+                                ]
+                              ),
+                              
+                            
+                          ),
+                          SizedBox(height: 30,),
+                          IconButton(
+                                          icon: new Image.asset('assets/images/trash.png'),
+                                         tooltip: 'Supprimer Un Etudiant',
+                                          onPressed: () {
+                                          service.removeStudent(widget.etudiant.email);
+                                          Navigator.pop(context);
+                                          Scaffold.of(context).showSnackBar(snackBarsuppression);
+
+
+                                           print("you clicked");
+                                                                 
+                                            },
+                                           ),
+                                 
+              
                
                         
                       ],
@@ -295,34 +306,5 @@ uti utilisateur;
            ),
          ),
     );
-
-         }
-  
-       
-         singUp() async {
-
-    
-      
-
-      await authService.signUpWithEmailAndPassword(widget.demande.email.toString(),
-          widget.demande.password.toString()).then((result){
-            if(result != null){
-              service.saveEtudiant(etudiant);
-                
-              Map<String,String> userDataMap = {
-                "name" : widget.demande.name,
-                "email" : widget.demande.email,
-                "role"  : "etudiant"
-              };
-
-              service.addUserInfo(userDataMap);
-
-            
-              
-            }
-      });
-    
   }
-    
 }
-

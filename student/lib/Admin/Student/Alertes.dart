@@ -1,42 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:projet/Admin/Doctor/DoctorInfo.dart';
-import 'package:projet/Admin/Doctor/ajoutmedecin.dart';
+import 'package:projet/Admin/Student/AlertInfo.dart';
 import 'package:projet/Database/AuthService.dart';
-import 'package:projet/modals/doctor.dart';
-import 'package:provider/provider.dart';
+import 'package:projet/modals/Alerte.dart';
 import 'package:projet/Database/FirestoreService.dart';
+import 'package:provider/provider.dart';
 
+class AlertList extends StatefulWidget {
+  AlertList({Key key}) : super(key: key);
 
-class DoctorListTile extends StatelessWidget {
-  const DoctorListTile({Key key}) : super(key: key);
+  _AlertListState createState() => _AlertListState();
+}
+
+class _AlertListState extends State<AlertList> {
+  
 
   @override
   Widget build(BuildContext context) {
-        FirestoreService firebaseServices = FirestoreService();
+    final FirestoreService firebaseServices = FirestoreService();
 
-    return  Scaffold(
-
-          body: StreamProvider(
-          create: (BuildContext context) => firebaseServices.getDoctorList(),
-           //child: iteminscription(),
-           child: MaterialApp(home: DoctorTile())),
-          
-
-           
-    );
+    return StreamProvider(
+        create: (BuildContext context) => firebaseServices.getAlerteList(),
+         //child: iteminscription(),
+         child: MaterialApp(home: AlertTile()));
   }
-  }
+}
 
-  class DoctorTile extends StatelessWidget {
-     DoctorTile({Key key}) : super(key: key);
-  
+class AlertTile extends StatelessWidget {
+   AlertTile({Key key}) : super(key: key);
+
  final FirestoreService service = FirestoreService();
        final  AuthService authService = new AuthService();
  
   @override
   Widget build(BuildContext context) {
     
-List userList = Provider.of<List<Doctor>>(context);
+List userList = Provider.of<List<Alerte>>(context);
 
     return Material(
           child: Container(child:  userList != null ? ListView.builder(
@@ -71,8 +69,8 @@ List userList = Provider.of<List<Doctor>>(context);
                                     children:<Widget>[
                                       GestureDetector(
                                         onTap: (){
-                               //  Navigator.push(context,
-                                 //MaterialPageRoute(builder: (context) => ConfirmationPage(demande: userList[index])));
+                               Navigator.push(context,
+                                 MaterialPageRoute(builder: (context) => AlertInfo(alerte: userList[index])));
                                         },
                                        child: Container(
                                           child: Row(
@@ -89,41 +87,35 @@ List userList = Provider.of<List<Doctor>>(context);
                                                                 shape: BoxShape.circle,
                                                                 image: new DecorationImage(
                                                                 fit: BoxFit.fitWidth,
-                                                                image:  AssetImage('assets/images/doctor.png')
+                                                                image: AssetImage('assets/images/etudiant2.png')
                                                       )
                             )),
                                               ),
                                               Divider(),
-                             GestureDetector(
-                               onTap: (){
-                                  Navigator.push(context,
-                                 MaterialPageRoute(builder: (context) => DoctorInfo(doctor: userList[index])));
-                               },
-                                  child: Container(
-                                child: Row(
-                                  
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
+                             Container(
+                              child: Row(
+                                
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
 
-                                      Text(userList[index].name, style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: 'Cardo',
-                                      ),),
-                                      Text(userList[index].specialite6, style: TextStyle(fontSize: 15, color: Colors.grey))
-                                  ],
-                                ),
-                                    ),
-                                
-                                
-                                  ],
-                                )
+                                    Text(userList[index].name, style: TextStyle(
+                                        fontSize: 20,
+                                        fontFamily: 'Cardo',
+                                    ),),
+                                    Text('${userList[index].cas} }', style: TextStyle(fontSize: 15, color: Colors.grey))
+                                ],
+                              ),
+                                  ),
+                              
+                              
+                                ],
+                              )
                             ),
-                             ),
                                             ],
                                           ),
                                         ),
@@ -133,14 +125,7 @@ List userList = Provider.of<List<Doctor>>(context);
                             Spacer(),
                             
                             
-                            IconButton(
-                                        icon: new Image.asset('assets/images/trash.png'),
-                                       tooltip: 'Supprimer Un Medecin',
-                                        onPressed: () {
-                                         print("you clicked");
-                                                               
-                                          },
-                                         ),
+                           
                                                                           
                                       
                              SizedBox(height:4) ,  
@@ -178,4 +163,4 @@ List userList = Provider.of<List<Doctor>>(context);
     );
   }
 
-  }
+}

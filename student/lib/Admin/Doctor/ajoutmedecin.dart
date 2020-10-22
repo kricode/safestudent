@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:dropdownfield/dropdownfield.dart';
 import 'package:flutter/material.dart';
 import 'package:projet/Admin/main.dart';
 import 'package:projet/Database/FirestoreService.dart';
@@ -16,6 +17,12 @@ class _AjoutmedecinPageState extends State<AjoutmedecinPage> {
     String _email;
      String _password;
       String _specialite;
+       List<String> specialite= [
+    "Cardiologue",
+    "Généraliste",
+    "Neurologue",
+    
+  ];
 
     AuthService authService = new AuthService();
     Doctor doctor ;
@@ -169,34 +176,18 @@ singUp() async {
            return Column(
              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
              children: [
-               TextFormField(
-                  decoration: InputDecoration(labelText:"Spécialité",
-                   contentPadding:
-                                          EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                                      focusColor: Color(0xff0962ff),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                        
-                                        borderSide: BorderSide(color: Color(0xff0962ff),),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                        borderSide: BorderSide(
-                                          color: Colors.grey[350],
-                                        ),
-                                      ),),
-               
-      validator: (String value) {
-        if (value.isEmpty) {
-          return 'veuilez saisir votre spécialité';
-        }
-
-        return null;
-      },
-      onSaved: (String value) {
-        _specialite = value;
-      },
-                ),
+              DropDownField(
+                  onValueChanged: (dynamic value) {
+                    _specialite = value;
+                    print(_specialite);
+                  },
+                  value: _specialite,
+                  required: false,
+                  hintText: 'La specialité',
+                  labelText: 'Specialite',
+                  items: specialite,
+        
+              ),
              ],
            );
       }
@@ -228,37 +219,19 @@ singUp() async {
             height: 30.0,
             ),
           
-             GestureDetector(
-                      child: Container(
-                      
-                      margin: EdgeInsets.symmetric(vertical: 20),
-                      height: 75,
-                      width: 150,
-                      decoration: BoxDecoration(
-                        color: Color(0xFF9578CD),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Ajouter',
-                          style: TextStyle(
-                            fontFamily: 'ProductSans',
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                      onTap: (){
-                        print(_email);
+             
+             IconButton(
+                                        icon: new Image.asset('assets/images/user.png'),
+                                       tooltip: 'Ajouter Un Medecin',
+                                        onPressed: () {
+                                           print(_name);
                        doctor = new Doctor(name:_name, email: _email, password: _password, specialite: _specialite,);
-                                     
-
-
-
-              } ,
-                     ),
+                       print(doctor);
+                   // singUp();
+                                                               
+                                          },
+                                         ),
+                    
 
           ],
           )

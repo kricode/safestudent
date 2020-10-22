@@ -3,7 +3,6 @@ import 'package:backdrop/backdrop.dart';
 import 'package:projet/Database/AuthService.dart';
 import 'package:projet/Database/FirestoreService.dart';
 import 'package:projet/Sign/connection.dart';
-import 'package:provider/provider.dart';
 import './widgets/avatar.dart';
 
 class admin extends StatefulWidget {
@@ -15,49 +14,40 @@ class admin extends StatefulWidget {
 class _adminState extends State<admin> {
   @override
 Widget build(BuildContext context) {
+  AuthService auth = AuthService();
       final FirestoreService firebaseServices = FirestoreService();
+    final signout = SnackBar(content: Text('Vous vous êtes déconnecté'));
 
 int _currentindex = 0;
   return MaterialApp(
 
     title: 'Safe Student',
-    home: BackdropScaffold(
-      
-      appBar: BackdropAppBar(
-        backgroundColor: Colors.lightBlueAccent,
-        title: Text("Acceuil"),
-        actions: [
-          GestureDetector(
-            onTap: () {
-              AuthService().signOut();
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => Connection()));
-            },
-            child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Icon(Icons.exit_to_app)),
-          )
-        ],
-        
+    home: Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 70,
+        title: Text("Safe Student", style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontFamily: 'Cardo',
+                            fontSize: 25,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w200
+                          ),),
+        actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.exit_to_app),
+          onPressed: () {
+            auth.signOut();
+               Navigator.push(context,
+                                 MaterialPageRoute(builder: (context) => Connection()));
+                                 Scaffold.of(context).showSnackBar(signout);
+            print("you clicked on signout");
+          },
+        )
+      ],
+        elevation: 30,
       ),
-      stickyFrontLayer: true,
-     // frontLayer: _pages[_currentIndex],
-      backLayer: BackdropNavigationBackLayer(
-        items: [
-          ListTile(title: Text("Acceuil")),
-          ListTile(title: Text("Deconnexion")),
-        ],
-        //onTap: (int position) => {setState(() => _currentIndex = position)},
-      ),
-      frontLayer: Container(
-        child: avatar(),
-      /*  child: StreamProvider(
-        create: (BuildContext context) => firebaseServices.getUserList(),
-         //child: iteminscription(),
-         child: DemandesList(),
-        )*/
-      )
-    ),
+    body: avatar(),
+    )
     
   );
 

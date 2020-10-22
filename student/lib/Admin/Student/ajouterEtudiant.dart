@@ -1,3 +1,4 @@
+import 'package:dropdownfield/dropdownfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projet/Admin/main.dart';
@@ -25,9 +26,23 @@ class _AjoutetudiantPageState extends State<AjoutetudiantPage> {
   String _name;
     String _email;
      String _password;
-      String _departement;
-        String _cas;
+
         String _numero;
+ String _departementController;
+  String _casController;
+        List<String> departement= [
+    "Informatique",
+    "automatique",
+    "Biologie",
+    
+  ];
+  List<String> cas= [
+    "hypertension",
+    "Insuffisance cardiaque",
+    "Diabéte",
+    
+  ];
+      
         FirestoreService service = FirestoreService();
           bool isLoading = false;
 
@@ -49,7 +64,7 @@ class _AjoutetudiantPageState extends State<AjoutetudiantPage> {
                                   style: TextStyle(
                                     fontFamily: 'Product Sans',
                                     fontSize: 15,
-                                    color: Color(0xff8f9db5),
+                                    color: Colors.blue,
                                   ),
                                 ),
                               ),
@@ -197,34 +212,18 @@ class _AjoutetudiantPageState extends State<AjoutetudiantPage> {
                                   ),
                                 ),
                               ),
-               TextFormField(
-                  decoration: InputDecoration(labelText:"Département",
-                   contentPadding:
-                                          EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                                      focusColor: Color(0xff0962ff),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                        
-                                        borderSide: BorderSide(color: Color(0xff0962ff),),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                        borderSide: BorderSide(
-                                          color: Colors.grey[350],
-                                        ),
-                                      ),),
-               
-      validator: (String value) {
-        if (value.isEmpty) {
-          return 'veuilez saisir le département';
-        }
-
-        return null;
-      },
-      onSaved: (String value) {
-        _departement = value;
-      },
-                ),
+               DropDownField(
+                  onValueChanged: (dynamic value) {
+                    _departementController = value;
+                    print(_departementController);
+                  },
+                  value: _departementController,
+                  required: false,
+                  hintText: 'Département',
+                  labelText: 'Département',
+                  items: departement,
+        
+              ),
              ],
            );
       }
@@ -271,7 +270,7 @@ class _AjoutetudiantPageState extends State<AjoutetudiantPage> {
                                   : "Entrez Un Numero Valide";
                             },
       onSaved: (String value) {
-        _departement = value;
+        _numero = value;
       },
                 ),
              ],
@@ -292,34 +291,18 @@ class _AjoutetudiantPageState extends State<AjoutetudiantPage> {
                                   ),
                                 ),
                               ),
-               TextFormField(
-                  decoration: InputDecoration(labelText:"Maladie",
-                   contentPadding:
-                                          EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                                      focusColor: Color(0xff0962ff),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                        
-                                        borderSide: BorderSide(color: Color(0xff0962ff),),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                        borderSide: BorderSide(
-                                          color: Colors.grey[350],
-                                        ),
-                                      ),),
-               
-      validator: (String value) {
-        if (value.isEmpty) {
-          return 'veuilez saisir votre maladie';
-        }
-
-        return null;
-      },
-      onSaved: (String value) {
-        _cas = value;
-      },
-                ),
+               DropDownField(
+                  onValueChanged: (dynamic value) {
+                    _casController = value;
+                    print(_casController);
+                  },
+                  value: _casController,
+                  required: false,
+                  hintText: 'Votre cas',
+                  labelText: 'Cas',
+                  items: cas,
+        
+              ),
              ],
            );
       }
@@ -330,7 +313,7 @@ class _AjoutetudiantPageState extends State<AjoutetudiantPage> {
       appBar: AppBar(
         title:Text("Ajouter un étudiant"),
         centerTitle: true,
-        backgroundColor: Color(0xFF9578CD),
+        backgroundColor: Colors.blue,
       ),
       body: SingleChildScrollView(
               child: Container(
@@ -355,18 +338,30 @@ class _AjoutetudiantPageState extends State<AjoutetudiantPage> {
             SizedBox(
             height: 25.0,
             ),
+            IconButton(
+                                        icon: new Image.asset('assets/images/user.png'),
+                                       tooltip: 'Supprimer Un Etudiant',
+                                        onPressed: () {
+                                         print("you clicked");
+                                         etudiant = new Etudiant(name:_name, email: _email, password: _password, cas: _casController, departement: _departementController, image: 'non',);
+          print(_name);
+                   // singUp();
+                                                               
+                                          },
+                                         ),
           
              SingleChildScrollView(
                             child: Row(
                  children: [
-                   GestureDetector(
+
+                  /* GestureDetector(
                             child: Container(
                             
                             margin: EdgeInsets.symmetric(vertical: 20),
                             height: 65,
                             width: 110,
                             decoration: BoxDecoration(
-                              color: Color(0xFF9578CD),
+                              color: Colors.blue,
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Center(
@@ -382,12 +377,12 @@ class _AjoutetudiantPageState extends State<AjoutetudiantPage> {
                             ),
                           ),
                             onTap: (){
-          etudiant = new Etudiant(name:_name, email: _email, password: _password, cas: _cas, departement: _departement, image: 'non',);
+          etudiant = new Etudiant(name:_name, email: _email, password: _password, cas: _casController, departement: _departementController, image: 'non',);
           print(_email);
                     singUp();
                       
                     } ,
-                           ),
+                           ),*/
                            SizedBox(
                              height:20,
                            width:100),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projet/acceuilEtudiant/maladies.dart';
+import 'package:projet/EtudiantUi/maladies.dart';
 
 
 class AssistancePage extends StatefulWidget {

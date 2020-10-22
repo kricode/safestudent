@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 
-import 'package:projet/acceuilEtudiant/main.dart';
+import 'package:projet/EtudiantUi/main.dart';
 class Profil extends StatefulWidget{
   final dynamic profil;
   Profil({this.profil});
@@ -25,7 +25,7 @@ class Profil extends StatefulWidget{
                   height: 200,
                   color: Color(0xFF9578CD),
                  
-                  
+                
                   
                 ),
                 

@@ -1,9 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+﻿import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:projet/Database/FirestoreService.dart';
+import 'package:dropdownfield/dropdownfield.dart';
 import 'package:projet/Sign/connection.dart';
 
 import '../modals/Demande.dart';
@@ -50,12 +51,28 @@ FirestoreService service = FirestoreService();
    TextEditingController _nameController = TextEditingController();
    TextEditingController _passwordController = TextEditingController();
    TextEditingController _emailController = TextEditingController();
-   TextEditingController _casController = TextEditingController();
-   TextEditingController _departementController = TextEditingController();
+
    TextEditingController _imageController = TextEditingController();
    TextEditingController _numberController = TextEditingController();
   
     String imageUrl;
+  String _departementController;
+  String _casController;
+  void initState() {
+    super.initState();
+  }
+  List<String> departement= [
+    "Informatique",
+    "automatique",
+    "Biologie",
+    
+  ];
+  List<String> cas= [
+    "hypertension",
+    "Insuffisance cardiaque",
+    "Diabéte",
+    
+  ];
       
 Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -350,110 +367,52 @@ Future<void> _selectDate(BuildContext context) async {
                           Column(
                             
                             children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 50.0, bottom: 8),
-                                  child: Text(
-                                    "Cas",
-                                    style: TextStyle(
-                                      fontFamily: 'Product Sans',
-                                      fontSize: 15,
-                                      color: Color(0xff8f9db5),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                             
                               //
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(40, 0, 40, 10),
-                                child: TextFormField(
-                                  controller: _casController,
-                                  
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      color: Color(0xff0962ff),
-                                      fontWeight: FontWeight.bold),
-                                  decoration: InputDecoration(
-                                    hintText: "*************",
-                                    hintStyle: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.grey[350],
-                                        fontWeight: FontWeight.w600),
-                                    contentPadding:
-                                        EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                                    focusColor: Color(0xff0962ff),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(color: Color(0xff0962ff)),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(
-                                        color: Colors.grey[350],
-                                      ),
-                                    ),
-                                    
-                                  ),
-                                ),
+                                child: DropDownField(
+                  onValueChanged: (dynamic value) {
+                    _casController = value;
+                    print(_casController);
+                  },
+                  value: _casController,
+                  required: false,
+                  hintText: 'Votre cas',
+                  labelText: 'Cas',
+                  items: cas,
+        
+              ),
                               ),
                               //
                             ],
                           ),
+                          SizedBox(height: 30,),
 
                           Column(
                             
                             children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 50.0, bottom: 8),
-                                  child: Text(
-                                    "Departement",
-                                    style: TextStyle(
-                                      fontFamily: 'Product Sans',
-                                      fontSize: 15,
-                                      color: Color(0xff8f9db5),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                             
                               //
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(40, 0, 40, 10),
-                                child: TextFormField(
-                                  controller: _departementController,
-                                  
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      color: Color(0xff0962ff),
-                                      fontWeight: FontWeight.bold),
-                                  decoration: InputDecoration(
-                                    hintText: "Informatique",
-                                    hintStyle: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.grey[350],
-                                        fontWeight: FontWeight.w600),
-                                    contentPadding:
-                                        EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                                    focusColor: Color(0xff0962ff),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(color: Color(0xff0962ff)),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(
-                                        color: Colors.grey[350],
-                                      ),
-                                    ),
-                                    
-                                  ),
-                                ),
+                                child:  DropDownField(
+                  onValueChanged: (dynamic value) {
+                    _departementController = value;
+                    print(_departementController);
+                  },
+                  value: _departementController,
+                  required: false,
+                  hintText: 'Département',
+                  labelText: 'Département',
+                  items: departement,
+        
+              ),
                               ),
                               //
                             ],
                           ),
+                          SizedBox(height: 30,),
                         /*  IconButton(
                             icon: Icon(Icons.image),
                             onPressed: () => uploadImage(_emailController.text),
@@ -499,7 +458,7 @@ Future<void> _selectDate(BuildContext context) async {
                                       fontWeight: FontWeight.bold),
                                   decoration: InputDecoration(
                                     prefixIcon: Icon(Icons.phone),
-                                    hintText: "*************",
+                                    hintText: "0660526352",
                                     hintStyle: TextStyle(
                                         fontSize: 16,
                                         color: Colors.grey[350],
@@ -573,8 +532,8 @@ Future<void> _selectDate(BuildContext context) async {
                           String _name = _nameController.text;
                           String _email = _emailController.text;
                           String _password = _passwordController.text;
-                          String _cas = _casController.text;
-                          String _departement = _departementController.text;
+                          String _cas = _casController;
+                          String _departement = _departementController;
                           String _image = _imageController.text;
                           _demande = new Demande(name:_name, email: _email, password: _password, cas: _cas, departement: _departement, image: 'non', role: "etudiant", anniv: Timestamp.fromMicrosecondsSinceEpoch(selectedDate.microsecondsSinceEpoch)
 , numero: _numberController.text);

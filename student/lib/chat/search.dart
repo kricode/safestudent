@@ -68,6 +68,7 @@ class _SearchState extends State<Search> {
     Navigator.push(context, MaterialPageRoute(
       builder: (context) => Chat(
         chatRoomId: chatRoomId,
+        myname: widget.data
       )
     ));
 

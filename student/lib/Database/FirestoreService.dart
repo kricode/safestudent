@@ -1,3 +1,5 @@
+import 'package:projet/modals/Alerte.dart';
+
 import '../modals/Demande.dart';
 import '../modals/doctor.dart';
 import '../modals/Etudiant.dart';
@@ -11,6 +13,12 @@ class FirestoreService {
   Future<void> saveDemande(Demande demande){
     return _db.collection('Demandes').doc(demande.email).set(demande.toMap());
   }
+
+
+  Future<void> saveAlerte(Alerte alerte){
+    return _db.collection('Alertes').doc(alerte.email).set(alerte.toMap());
+  }
+
 
   Future<void> saveDoctor(Doctor doctor){
     return _db.collection('Doctors').doc(doctor.email).set(doctor.toMap());
@@ -40,6 +48,7 @@ Future<void> saveUser(uti utilisateur) {
   }
 
 
+
    getEtudiantInfo(String email) async {
     return _db
         .collection("Etudiants")
@@ -57,9 +66,28 @@ Future<void> saveUser(uti utilisateur) {
         .map((document) => Demande.fromFirestore(document.data()))
         .toList());
   }
+Stream<List<Etudiant>> getStudentList() {
+    return _db.collection('Etudiants')
+        .snapshots()
+        .map((snapShot) => snapShot.docs
+        .map((document) => Etudiant.fromFirestore(document.data()))
+        .toList());
+  }
+
+   Stream<List<Alerte>> getAlerteList() {
+    return _db.collection('Alertes')
+        .snapshots()
+        .map((snapShot) => snapShot.docs
+        .map((document) => Alerte.fromFirestore(document.data()))
+        .toList());
+  }
+  
 
   Future<void> removeDemande(String demandeemail){
     return _db.collection('Demandes').doc(demandeemail).delete();
+  }
+   Future<void> removeDoctor(String doctoremail){
+    return _db.collection('Doctos').doc(doctoremail).delete();
   }
 
 Future<void> removeStudent(String studentEmail){
@@ -67,12 +95,11 @@ Future<void> removeStudent(String studentEmail){
   }
 
 //Recuperation  de la liste des docteurs:
- Stream<List<Demande>> getDoctorList() {
-    return _db.collection('users')
-        .where("role", isEqualTo: "doctor" )
-        .snapshots()
+ Stream<List<Doctor>> getDoctorList() {
+    return _db.collection('Doctors')
+         .snapshots()
         .map((snapShot) => snapShot.docs
-        .map((document) => Demande.fromFirestore(document.data()))
+        .map((document) => Doctor.fromFirestore(document.data()))
         .toList());
   }
 
@@ -155,6 +182,15 @@ Future<void> addUserInfo(userData) async {
         .collection("chatRoom")
         .where('users', arrayContains: itIsMyName)
         .snapshots();
+  }
+
+  getLastChat(String chatRoomId) async{
+    return _db
+    .collection("chatRoom")
+    .doc(chatRoomId)
+    .collection("chats")
+    .orderBy('time')
+    .get();
   }
   
 

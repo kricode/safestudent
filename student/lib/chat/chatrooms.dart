@@ -29,6 +29,7 @@ class _ChatRoomState extends State<ChatRoom> {
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return ChatRoomsTile(
+                    username: widget.actuel['name'],
                     name: snapshot.data.documents[index].data()['chatRoomId']
                         .toString()
                         .replaceAll("_", "")
@@ -44,21 +45,25 @@ class _ChatRoomState extends State<ChatRoom> {
   @override
   void initState() {
     getUserInfogetChats();
-    print(widget.actuel['name']);
+    print(widget.actuel);
     super.initState();
   }
 
+  
+
+String myname;
   getUserInfogetChats() async {
   
     FirestoreService().getUserChats(widget.actuel['name'],).then((snapshots) {
       setState(() {
+        myname =widget.actuel['name'];
+
         chatRooms = snapshots;
         print(
             "we got the data + ${chatRooms.toString()} this is name  ${widget.actuel['name']}");
       });
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,8 +90,9 @@ class _ChatRoomState extends State<ChatRoom> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.search),
         onPressed: () {
+          
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Search(data: widget.actuel,)));
+              context, MaterialPageRoute(builder: (context) => Search(data:  widget.actuel)));
         },
       ),
     );
@@ -94,17 +100,21 @@ class _ChatRoomState extends State<ChatRoom> {
 }
 
 class ChatRoomsTile extends StatelessWidget {
+  final String username;
   final String name;
   final String chatRoomId;
 
-  ChatRoomsTile({this.name,@required this.chatRoomId});
+  ChatRoomsTile({this.name,@required this.chatRoomId, @required this.username});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
+        
         Navigator.push(context, MaterialPageRoute(
           builder: (context) => Chat(
+            title : name,
+            myname: username,
             chatRoomId: chatRoomId,
           )
         ));
@@ -137,9 +147,18 @@ class ChatRoomsTile extends StatelessWidget {
                     color: Colors.white,
                     fontSize: 16,
                     fontFamily: 'OverpassRegular',
+                    fontWeight: FontWeight.w300)),
+                    Spacer(),
+            Text(name,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontFamily: 'OverpassRegular',
                     fontWeight: FontWeight.w300))
           ],
         ),
+        
       ),
     );
   }

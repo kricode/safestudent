@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:projet/Admin/Doctor/DoctorListTile.dart';
+import 'package:projet/Admin/Doctor/DoctorMain.dart';
 import 'package:projet/Admin/Student/StudentDemandes.dart';
+import 'package:projet/Admin/Student/StudentTabs.dart';
 import '../Student/StudentList.dart';
 
 
@@ -48,7 +50,7 @@ class avatar extends StatelessWidget {
                             //se derige vers etudiant
                             onTap: (){
                               Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => StudentDemandes()),
+                        MaterialPageRoute(builder: (context) => Tabs()),
                           );
 
                             },
@@ -83,7 +85,7 @@ class avatar extends StatelessWidget {
                             // se derige vers doctorlisttile
                             onTap: (){
                                 Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => DoctorListTile()),
+                        MaterialPageRoute(builder: (context) => DoctorMain()),
                           );
                               
                             },
