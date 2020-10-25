@@ -42,6 +42,8 @@ dependencies:
   geoflutterfire: ^2.2.1
   google_maps_flutter: 
   dropdownfield:
+  sms:
+  progress_indicators: ^0.1.5
 
 
 
@@ -96,6 +98,13 @@ flutter:
    - assets/images/reject.png
    - assets/images/trash.png
    - assets/images/user.png
+   - assets/images/ambulancier.png
+   - assets/images/send.png
+   - assets/images/protectionDz.png
+   - assets/images/samu.png
+   
+
+
 
    
   #   - images/a_dot_ham.jpeg

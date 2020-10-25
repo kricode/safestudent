@@ -1,21 +1,23 @@
-import 'dart:ui';
-
 import 'package:dropdownfield/dropdownfield.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:projet/Admin/main.dart';
-import 'package:projet/Database/FirestoreService.dart';
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:projet/Database/AuthService.dart';
-import 'package:projet/Modals/Doctor.dart';
+import 'package:projet/Database/FirestoreService.dart';
+import 'package:projet/modals/Utilisateur.dart';
+import 'package:projet/modals/doctor.dart';
+import 'package:projet/modals/doctor.dart';
 
-class AjoutmedecinPage extends StatefulWidget {
-  @override
-  _AjoutmedecinPageState createState() => _AjoutmedecinPageState();
+class AddDoctor extends StatefulWidget {
+  AddDoctor({Key key}) : super(key: key);
+
+  _AddDoctorState createState() => _AddDoctorState();
 }
 
-class _AjoutmedecinPageState extends State<AjoutmedecinPage> {
 
-  
-       List<String> specialite= [
+
+class _AddDoctorState extends State<AddDoctor> {
+     List<String> specialite= [
     "Cardiologue",
     "Généraliste",
     "Neurologue",
@@ -24,66 +26,83 @@ class _AjoutmedecinPageState extends State<AjoutmedecinPage> {
 
     AuthService authService = new AuthService();
     Doctor doctor ;
+    User utif;
 
-    final GlobalKey<FormState> _formKey =GlobalKey<FormState>();
 
 
-singUp() async {
+  void  singUp(String name, String email , String password) async {
 
-    if(_formKey.currentState.validate()){
-      setState(() {
+    
 
-        isLoading = true;
-      });
-
-      await authService.signUpWithEmailAndPassword(_email.text,
-          _password.text).then((result){
+     utif =  await authService.signUpWithEmailAndPassword(email,
+          email).then((result){
             if(result != null){
+              
                 
               Map<String,String> userDataMap = {
-                "name" : _name.text,
-                "email" : _email.text,
-                "role"  : "doctor"
+                "name" : name ,
+                "email" : email,
+                "role"  : "etudiant"
+                
               };
 
               service.addUserInfo(userDataMap);
-
-            
-                Navigator.pop(context);
-
+             
             }
       });
-    }
+    
   }
 
-
-     FirestoreService service = FirestoreService();
-          bool isLoading = false;
-     TextEditingController _name;
-    TextEditingController _email;
-     TextEditingController _password;
-      String _specialite;
+  final GlobalKey<FormState> _formKey =GlobalKey<FormState>();
+   FirestoreService service = FirestoreService();
+   bool isLoading = false;
+   TextEditingController _name = TextEditingController();
+   TextEditingController _email = TextEditingController();
+   TextEditingController _password = TextEditingController();
+   String _specialite;
   @override
   Widget build(BuildContext context) {
-    final snackbarajout = SnackBar(content: Text('Vous avez ajouté un Etudiant'));
-
-       
+     final snackbarajout = SnackBar(content: Text('Vous avez ajouté un Etudiant'));
 
     return Scaffold(
-      appBar: AppBar(
-        title:Text("Ajouter un médecin"),
-        centerTitle: true,
-        backgroundColor: Color(0xFF9578CD),
-      ),
       body: SingleChildScrollView(
-              child: Container(
-          margin:EdgeInsets.all(24),
-          child: Form(
-            key: _formKey,
-            child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-          children:<Widget>[
-            Column(
+        physics: BouncingScrollPhysics(),
+
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Stack(children: [
+              ClipPath(
+            clipper: WaveClipperOne(),
+            child: Container(
+              height: 200,
+              color: Colors.blue[200],
+              child: Center(child: Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text("Ajoutez  Un  Medecin", style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),),
+                ),
+              )),
+            ),
+          ),
+            ],),
+
+          SizedBox(height: 40,),
+          Form(
+              key : _formKey,
+                child: Stack(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      
+                     
+                      //
+                      Column(
                             
                             children: [
                               Align(
@@ -105,7 +124,7 @@ singUp() async {
                                 padding: const EdgeInsets.fromLTRB(40, 0, 40, 10),
                                 child: TextFormField(
                                    validator: (val) {
-                              return val.length > 9
+                              return val.length > 8
                                   ? null
                                   : "Entrez votre Nom et Prenom";
                             },
@@ -266,10 +285,21 @@ singUp() async {
                               //
                             ],
                           ),
-                          SizedBox(height: 30,),
                           
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(30, 10, 30, 20),
+
+                     
+                        /*  IconButton(
+                            icon: Icon(Icons.image),
+                            onPressed: () => uploadImage(_emailController.text),
+                          ),*/
+                         
+                      //
+                      
+                      SizedBox(
+                        height: 15,
+                      ),
+                     Padding(
+                                padding: const EdgeInsets.fromLTRB(50, 10, 30, 20),
                                 child: DropDownField(
                                     onValueChanged: (dynamic value) {
                                       _specialite = value;
@@ -283,28 +313,71 @@ singUp() async {
                         
                                 ),
                               ),
-                              SizedBox(height: 30),
-                              IconButton(
+
+                      SizedBox(height: 30,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          IconButton(
                                         icon: new Image.asset('assets/images/user.png'),
-                                       tooltip: 'Supprimer Un Etudiant',
+                                        iconSize: 40,
+                                       tooltip: 'Ajouter Le Medecin',
                                         onPressed: () {
                                          print("you clicked");
-                                        print(_name);
-                                        print(_specialite);
-                                                // singUp();
-                                        Navigator.pop(context);
+                                        
+                                               
+                                                if (_formKey.currentState.validate()){
+                                               print(_name.text);
+                                              print(_specialite);
+                                              print(_email.text);
+                                              Doctor doctor = new Doctor( email: _email.text, name: _name.text, password: _password.text, specialite: _specialite );
+                                              service.saveDoctor(doctor);
+                                             singUp(_name.text, _email.text, _password.text);
+                                             
+                                              uti utilisateur = new uti(email: _email.text, name:  _name.text, password: _password.text, role: "doctor" ); 
+                                            service.saveUser(utilisateur);
+                                            Navigator.pop(context);
+                                            
+
+                       }
+                                        
                                         Scaffold.of(context).showSnackBar(snackbarajout);
                                                                
                                           },
                                          ),
-                    
+                          IconButton(
+                                        icon: new Image.asset('assets/images/reject.png'),
+                                        iconSize: 50,
+                                       tooltip: 'Annuler l''ajout',
+                                        onPressed: () {
+                                         print("you cancelled");
+                                        
+                                                // singUp();
+                                        Navigator.pop(context);
+                                                               
+                                          },
+                                         ),
+                        ],
+                        
+                      )
+                      
+                    ],
+                  ),
+                  
+                  
+                  
+                ],
+              ),
+            )
+          
+
 
           ],
-          )
-          ),
+
         ),
+
       ),
-      
     );
   }
+  
 }

@@ -177,7 +177,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
                              SizedBox(height:50,),
                              IconButton(
                                               icon: new Image.asset('assets/images/trash.png'),
-                                             tooltip: 'Supprimer Un Etudiant',
+                                             tooltip: 'Supprimer Un Medecin',
                                               onPressed: () {
                                               //service.removeStudent(widget.doctor.email);
                                               Navigator.pop(context);

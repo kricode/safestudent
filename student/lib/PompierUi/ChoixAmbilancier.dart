@@ -1,45 +1,59 @@
 import 'package:flutter/material.dart';
-import 'package:projet/Admin/Doctor/DoctorInfo.dart';
-import 'package:progress_indicators/progress_indicators.dart';
 import 'package:projet/Database/AuthService.dart';
-import 'package:projet/modals/doctor.dart';
-import 'package:provider/provider.dart';
 import 'package:projet/Database/FirestoreService.dart';
+import 'package:projet/modals/Alerte.dart';
+import 'package:projet/modals/Ambulancier.dart';
+import 'package:provider/provider.dart';
+import 'package:sms/sms.dart';
+import '../modals/AlerteValide.dart';
+
+class ChoixAmbilancier extends StatefulWidget {
+  final Alerte alerte;
+  ChoixAmbilancier({Key key, this.alerte}) : super(key: key);
+
+  _ChoixAmbilancierState createState() => _ChoixAmbilancierState();
+}
 
 
-class DoctorListTile extends StatelessWidget {
-  const DoctorListTile({Key key}) : super(key: key);
-
+class _ChoixAmbilancierState extends State<ChoixAmbilancier> {
   @override
   Widget build(BuildContext context) {
-        FirestoreService firebaseServices = FirestoreService();
+    FirestoreService service = FirestoreService();
 
-    return  Scaffold(
-
-          body: StreamProvider(
-          create: (BuildContext context) => firebaseServices.getDoctorList(),
-           //child: iteminscription(),
-           child: MaterialApp(home: DoctorTile())),
-          
-
-           
-    );
+    return StreamProvider(
+        create: (BuildContext context) => service.getAmbulancier('pompier'),
+         //child: iteminscription(),
+         child: MaterialApp(home: ListAmb(alerte: widget.alerte)));
   }
-  }
+}
 
-  class DoctorTile extends StatelessWidget {
-     DoctorTile({Key key}) : super(key: key);
+
+
+class ListAmb extends StatefulWidget {
+  final Alerte alerte;
+  ListAmb({Key key, this.alerte}) : super(key: key);
+
+  _ListAmbState createState() => _ListAmbState();
+}
+
+class _ListAmbState extends State<ListAmb> {
+
+
   
  final FirestoreService service = FirestoreService();
        final  AuthService authService = new AuthService();
- 
+         SmsSender sender = new SmsSender();
+
+  
   @override
   Widget build(BuildContext context) {
     
-List userList = Provider.of<List<Doctor>>(context);
+List userList = Provider.of<List<Ambulancier>>(context);
 
-    return Material(
-          child: Container(child:  userList != null ? ListView.builder(
+    return Scaffold(
+          body: Container(
+            
+            child:  userList != null ? ListView.builder(
           
           itemCount: userList.length,
           itemBuilder: (_, int index) => Padding(
@@ -80,24 +94,21 @@ List userList = Provider.of<List<Doctor>>(context);
                                               Padding(
                                                 padding: const EdgeInsets.all(10.0),
                                                 child: Container(
-                               //Ici nous allons faire montrer la foto et le nom prenom
-                                //nous avons decider de tout separer comme ça il sera plus simple
-                                //pour generer l'interface graphique
+                             
                                 width: 50,
                                   decoration: new BoxDecoration(
                                                                
                                                                 shape: BoxShape.circle,
                                                                 image: new DecorationImage(
                                                                 fit: BoxFit.fitWidth,
-                                                                image:  AssetImage('assets/images/doctor.png')
+                                                                image:  AssetImage('assets/images/ambulancier.png')
                                                       )
                             )),
                                               ),
                                               Divider(),
                              GestureDetector(
                                onTap: (){
-                                  Navigator.push(context,
-                                 MaterialPageRoute(builder: (context) => DoctorInfo(doctor: userList[index])));
+                                 
                                },
                                   child: Container(
                                 child: Row(
@@ -114,7 +125,7 @@ List userList = Provider.of<List<Doctor>>(context);
                                           fontSize: 20,
                                           fontFamily: 'Cardo',
                                       ),),
-                                      Text(userList[index].specialite, style: TextStyle(fontSize: 15, color: Colors.grey))
+                                      Text(userList[index].numero, style: TextStyle(fontSize: 15, color: Colors.grey))
                                   ],
                                 ),
                                     ),
@@ -133,14 +144,43 @@ List userList = Provider.of<List<Doctor>>(context);
                             Spacer(),
                             
                             
-                            IconButton(
-                                        icon: new Image.asset('assets/images/trash.png'),
-                                       tooltip: 'Supprimer Un Medecin',
-                                        onPressed: () {
-                                         print("you clicked");
-                                                               
-                                          },
-                                         ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 15  ),
+                              child: IconButton(
+                                          icon: new Image.asset('assets/images/send.png'),
+                                         tooltip: 'Envoyer un message',
+                                          onPressed: () {
+                                           print("you clicked on send message");
+                                           String message = 'Vous avez une Alerte /n Dont le cas est ${widget.alerte.cas} /n Nom de la personne : ${widget.alerte.name} /n Veuillez nous contacter';
+                                           List<String> recipents = [widget.alerte.numero];
+                                           //A essayer une fois i have reseau psk djezzy makach l credit xd
+                                      //       sender.sendSms(new SmsMessage(widget.alerte.numero, 'Hello flutter!'));
+                                           SmsMessage messagesend = new SmsMessage(widget.alerte.numero, message);
+                                          messagesend.onStateChanged.listen((state) {
+                                            if (state == SmsMessageState.Sent) {
+                                              print("SMS is sent!");
+                                            } else if (state == SmsMessageState.Delivered) {
+                                              print("SMS is delivered!");
+                                            } else {
+                                              print("error");
+                                            }
+                                          });
+                                          sender.sendSms(messagesend);
+                                          AlerteValide alerteValide = new AlerteValide(ambu: userList[index].name ,anniv: widget.alerte.anniv
+                                          ,email: widget.alerte.email, location: widget.alerte.place, numero: widget.alerte.numero, 
+                                          temps: widget.alerte.temps, service: 'samu'  );
+                                          String alerteId = '${widget.alerte.name} _ ${userList[index].name} _ ${widget.alerte.temps.toDate().toString()} _ Pompier';
+                                          print(alerteValide.ambu);
+
+                                          //service.valideAlerte(alerteValide, alerteId);
+                                          //service.removeAlert(widget.alerte.email);
+                                           
+                                          
+                                           
+                                                                 
+                                            },
+                                           ),
+                            ),
                                                                           
                                       
                              SizedBox(height:4) ,  
@@ -177,5 +217,4 @@ List userList = Provider.of<List<Doctor>>(context);
       ),
     );
   }
-
-  }
+}

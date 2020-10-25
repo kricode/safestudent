@@ -1,4 +1,6 @@
 import 'package:projet/modals/Alerte.dart';
+import 'package:projet/modals/AlerteValide.dart';
+import 'package:projet/modals/Ambulancier.dart';
 
 import '../modals/Demande.dart';
 import '../modals/doctor.dart';
@@ -24,8 +26,21 @@ class FirestoreService {
     return _db.collection('Doctors').doc(doctor.email).set(doctor.toMap());
   }
 
+  
 Future<void> saveEtudiant(Etudiant etudiant){
     return (_db.collection('Etudiants').doc(etudiant.email).set(etudiant.toMap())
+    
+          
+    );
+  }
+  Future<void> saveAmbulance(Ambulancier ambulancier){
+    return (_db.collection('Ambulanciers').doc(ambulancier.email).set(ambulancier.toMap())
+    
+          
+    );
+  }
+  Future<void> valideAlerte(AlerteValide alertevalide, String alerteId){
+    return (_db.collection('AlertesValidees').doc(alerteId).set(alertevalide.toMap())
     
           
     );
@@ -66,6 +81,21 @@ Future<void> saveUser(uti utilisateur) {
         .map((document) => Demande.fromFirestore(document.data()))
         .toList());
   }
+    Stream<List<AlerteValide>> getAlerteValide() {
+    return _db.collection('AlertesValidees')
+        .snapshots()
+        .map((snapShot) => snapShot.docs
+        .map((document) => AlerteValide.fromFirestore(document.data()))
+        .toList());
+  }
+   Stream<List<Ambulancier>> getAmbulancier(String service) {
+    return _db.collection('Ambulanciers')
+    .where('secteur' ,isEqualTo: service)
+         .snapshots()
+        .map((snapShot) => snapShot.docs
+        .map((document) => Ambulancier.fromFirestore(document.data()))
+        .toList());
+  }
 Stream<List<Etudiant>> getStudentList() {
     return _db.collection('Etudiants')
         .snapshots()
@@ -92,6 +122,9 @@ Stream<List<Etudiant>> getStudentList() {
 
 Future<void> removeStudent(String studentEmail){
     return _db.collection('Etudiants').doc(studentEmail).delete();
+  }
+  Future<void> removeAlert(String alertemail){
+    return _db.collection('Alertes').doc(alertemail).delete();
   }
 
 //Recuperation  de la liste des docteurs:
@@ -121,6 +154,14 @@ Future<void> addUserInfo(userData) async {
     _db.collection("users").doc(userData.email).set(userData).catchError((e) {
       print(e.toString());
     });
+  }
+
+  
+   getSecteuralert(String secteur) async {
+    return  _db
+        .collection("AlertesValidees")
+        .where('secteur', arrayContains: secteur)
+        .snapshots();
   }
 
     getRol(DocumentSnapshot snapshot) {
@@ -192,6 +233,7 @@ Future<void> addUserInfo(userData) async {
     .orderBy('time')
     .get();
   }
+  
   
 
 }

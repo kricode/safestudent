@@ -147,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   height: 200,
                   color: Color(0xFF9578CD),
-                  child: Center(child: Text('Safe Student1',style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold,fontSize: 25),)),
+                  child: Center(child: Text('Safe Student',style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold,fontSize: 25),)),
                   
                   
                 ),

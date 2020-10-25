@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projet/Admin/Student/Addstudent.dart';
 import 'package:projet/Admin/Student/Alertes.dart';
 import 'package:projet/Admin/Student/ajouterEtudiant.dart';
 import './StudentDemandes.dart';
@@ -59,7 +60,7 @@ class Tabs extends StatelessWidget {
         onPressed: (){
           
             Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => AjoutetudiantPage()),
+                        MaterialPageRoute(builder: (context) => AddStudent()),
                           );
         },
         tooltip: 'Ajouter un Etudiant',
@@ -69,37 +70,5 @@ class Tabs extends StatelessWidget {
     ),
   ),
 );
-    /*return Scaffold(
-      appBar: TabBar(
-        
-        tabs: [
-      Tab(icon: Icon(Icons.add_to_queue),text: 'Demandes', ),
-      Tab(icon: Icon(Icons.view_list),text: 'Etudiants', )
-
-
-    ],
-      ),
-
-    body: TabBarView(
-      children: [
-        StudentDemandes(),
-      StudentList()
-      
-
-      ],
-    ),
-
-    floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          
-            Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => AjoutetudiantPage()),
-                          );
-        },
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
-
-    );*/
   }
 }

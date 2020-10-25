@@ -1,89 +1,83 @@
-import 'dart:ui';
-
-import 'package:dropdownfield/dropdownfield.dart';
 import 'package:flutter/material.dart';
-import 'package:projet/Admin/main.dart';
+import 'package:flutter/services.dart';
 import 'package:projet/Database/FirestoreService.dart';
-import 'package:projet/Database/AuthService.dart';
-import 'package:projet/Modals/Doctor.dart';
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+import 'package:projet/modals/Ambulancier.dart';
 
-class AjoutmedecinPage extends StatefulWidget {
-  @override
-  _AjoutmedecinPageState createState() => _AjoutmedecinPageState();
+
+class AddAmbu extends StatefulWidget {
+  final String secteur;
+  AddAmbu({Key key, @required this.secteur}) : super(key: key);
+
+  _AddAmbuState createState() => _AddAmbuState();
 }
 
-class _AjoutmedecinPageState extends State<AjoutmedecinPage> {
-
-  
-       List<String> specialite= [
-    "Cardiologue",
-    "Généraliste",
-    "Neurologue",
-    
-  ];
-
-    AuthService authService = new AuthService();
-    Doctor doctor ;
-
-    final GlobalKey<FormState> _formKey =GlobalKey<FormState>();
+class _AddAmbuState extends State<AddAmbu> {
 
 
-singUp() async {
-
-    if(_formKey.currentState.validate()){
-      setState(() {
-
-        isLoading = true;
-      });
-
-      await authService.signUpWithEmailAndPassword(_email.text,
-          _password.text).then((result){
-            if(result != null){
-                
-              Map<String,String> userDataMap = {
-                "name" : _name.text,
-                "email" : _email.text,
-                "role"  : "doctor"
-              };
-
-              service.addUserInfo(userDataMap);
-
-            
-                Navigator.pop(context);
-
-            }
-      });
-    }
-  }
-
-
-     FirestoreService service = FirestoreService();
-          bool isLoading = false;
-     TextEditingController _name;
-    TextEditingController _email;
-     TextEditingController _password;
-      String _specialite;
+  final GlobalKey<FormState> _formKey =GlobalKey<FormState>();
+   FirestoreService service = FirestoreService();
+   bool isLoading = false;
+   TextEditingController _name = TextEditingController();
+   TextEditingController _email = TextEditingController();
+   TextEditingController _numero = TextEditingController();
+   String _specialite;
   @override
   Widget build(BuildContext context) {
-    final snackbarajout = SnackBar(content: Text('Vous avez ajouté un Etudiant'));
-
-       
+         final snackbarajout = SnackBar(content: Text('Vous avez ajouté un Ambulancier!'));
 
     return Scaffold(
-      appBar: AppBar(
-        title:Text("Ajouter un médecin"),
-        centerTitle: true,
-        backgroundColor: Color(0xFF9578CD),
-      ),
-      body: SingleChildScrollView(
-              child: Container(
-          margin:EdgeInsets.all(24),
-          child: Form(
-            key: _formKey,
-            child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-          children:<Widget>[
-            Column(
+          body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Stack(children: [
+               ClipPath(
+                    clipper: WaveClipperOne(),
+                    child: Container(
+                      height: 200,
+                      color: Color(0x8A0073e6),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          children: [
+                            
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Container(
+                                height: 60,
+                                child: Image(image: AssetImage('assets/images/samu.png')),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: Text("Ajoutez Un Ambulancier", style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25,
+                                fontFamily: "Cardo",
+                              ),),
+                            )
+                          ],
+                        ),
+                      )
+                    ),
+                  ),
+            ],),
+
+          SizedBox(height: 40,),
+          Form(
+              key : _formKey,
+                child: Stack(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      
+                     
+                      //
+                      Column(
                             
                             children: [
                               Align(
@@ -105,7 +99,7 @@ singUp() async {
                                 padding: const EdgeInsets.fromLTRB(40, 0, 40, 10),
                                 child: TextFormField(
                                    validator: (val) {
-                              return val.length > 9
+                              return val.length > 8
                                   ? null
                                   : "Entrez votre Nom et Prenom";
                             },
@@ -120,7 +114,7 @@ singUp() async {
                                       fontWeight: FontWeight.bold),
                                   decoration: InputDecoration(
                                     prefixIcon: Icon(Icons.person),
-                                    hintText: "Toumi",
+                                    hintText: "Boubchir Yasnima",
                                     hintStyle: TextStyle(
                                         fontSize: 16,
                                         color: Colors.grey[350],
@@ -145,6 +139,7 @@ singUp() async {
                               //
                             ],
                           ),
+                          SizedBox(height: 30,),
                           
                           Column(
                             
@@ -182,7 +177,7 @@ singUp() async {
                                       fontWeight: FontWeight.bold),
                                   decoration: InputDecoration(
                                     prefixIcon: Icon(Icons.alternate_email),
-                                    hintText: "Abdelkrim@email.com",
+                                    hintText: "Yasmina@email.com",
                                     hintStyle: TextStyle(
                                         fontSize: 16,
                                         color: Colors.grey[350],
@@ -207,6 +202,8 @@ singUp() async {
                               //
                             ],
                           ),
+                           SizedBox(height: 30,),
+
                           Column(
                             
                             children: [
@@ -215,7 +212,7 @@ singUp() async {
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 50.0, bottom: 8),
                                   child: Text(
-                                    "Mot De Passe",
+                                    "Numero De Telephone",
                                     style: TextStyle(
                                       fontFamily: 'Product Sans',
                                       fontSize: 15,
@@ -228,20 +225,26 @@ singUp() async {
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(40, 0, 40, 10),
                                 child: TextFormField(
+                                  keyboardType: TextInputType.number,
+                                                              inputFormatters: <TextInputFormatter>[
+                                                      FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10),
+                                                  ], 
                                    validator: (val) {
-                              return val.length > 6
+                              return val.length != 10
                                   ? null
-                                  : "Votre Mot De Passe Doit Depasser 6 caracteres";
+                                  
+                                  : "Entrez un numero Valide";
                             },
-                                  controller: _password,
+                                  controller: _numero,
                                   
                                   style: TextStyle(
+
                                       fontSize: 18,
                                       color: Color(0xff0962ff),
                                       fontWeight: FontWeight.bold),
                                   decoration: InputDecoration(
-                                    prefixIcon: Icon(Icons.vpn_key),
-                                    hintText: "Password",
+                                    prefixIcon: Icon(Icons.perm_phone_msg),
+                                    hintText: "0657146957",
                                     hintStyle: TextStyle(
                                         fontSize: 16,
                                         color: Colors.grey[350],
@@ -266,45 +269,77 @@ singUp() async {
                               //
                             ],
                           ),
-                          SizedBox(height: 30,),
                           
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(30, 10, 30, 20),
-                                child: DropDownField(
-                                    onValueChanged: (dynamic value) {
-                                      _specialite = value;
-                                      print(_specialite);
-                                    },
-                                    value: _specialite,
-                                    required: false,
-                                    hintText: 'Choisissez une spécialité',
-                                    labelText: 'Spécialité',
-                                    items: specialite,
-                        
-                                ),
-                              ),
-                              SizedBox(height: 30),
-                              IconButton(
+
+                     
+                        /*  IconButton(
+                            icon: Icon(Icons.image),
+                            onPressed: () => uploadImage(_emailController.text),
+                          ),*/
+                         
+                      //
+                      
+                      SizedBox(
+                        height: 15,
+                      ),
+                     
+
+                      SizedBox(height: 30,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          IconButton(
                                         icon: new Image.asset('assets/images/user.png'),
-                                       tooltip: 'Supprimer Un Etudiant',
+                                        iconSize: 40,
+                                       tooltip: 'Ajouter Le Medecin',
                                         onPressed: () {
-                                         print("you clicked");
-                                        print(_name);
-                                        print(_specialite);
+                                         print("you clicked on add");
+                                         if (_formKey.currentState.validate()){
+                                               print(_name.text);
+                                              print(_specialite);
+                                              print(_email.text);
+                                              Ambulancier ambulancier = new Ambulancier( email: _email.text, name: _name.text, numero: _numero.text, secteur: widget.secteur);
+                                              service.saveAmbulance(ambulancier);
+                                             
+                                            Navigator.pop(context);     
+                                             }
+                                                                               
+                                      
+                                                              
+                                          },
+                                         ),
+                          IconButton(
+                                        icon: new Image.asset('assets/images/reject.png'),
+                                        iconSize: 50,
+                                       tooltip: 'Annuler l''ajout',
+                                        onPressed: () {
+                                         print("you cancelled");
+                                        
                                                 // singUp();
                                         Navigator.pop(context);
-                                        Scaffold.of(context).showSnackBar(snackbarajout);
                                                                
                                           },
                                          ),
-                    
+                        ],
+                        
+                      )
+                      
+                    ],
+                  ),
+                  
+                  
+                  
+                ],
+              ),
+            )
+          
+
 
           ],
-          )
-          ),
+
         ),
+
       ),
-      
     );
   }
 }

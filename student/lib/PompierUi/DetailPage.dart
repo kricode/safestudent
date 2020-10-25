@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
-import 'package:projet/SamuUi.dart/acceuil.dart';
+import 'package:projet/PompierUi/acceuil.dart';
 import 'package:projet/modals/Alerte.dart';
-
+import 'ChoixAmbilancier.dart';
 class DetailPage extends StatefulWidget {
   final Alerte alerte;
   DetailPage({Key key, this.alerte}) : super(key: key);
@@ -53,7 +53,7 @@ class _DetailPageState extends State<DetailPage> {
                             onPressed: (){
                               Navigator.push(
                               context,
-                               MaterialPageRoute(builder: (context) => AcceuilSamu()),
+                               MaterialPageRoute(builder: (context) => AcceuilPompier()),
                               );
                             },
                             ),
@@ -278,6 +278,7 @@ class _DetailPageState extends State<DetailPage> {
                                                                   onPressed: () {
                                                                     print("you clicked map");
                                                                     
+                                                                    
                                                                   },
                                                                 ),
                                                                       ),
@@ -287,7 +288,10 @@ class _DetailPageState extends State<DetailPage> {
                                                                 icon: new Image.asset('assets/images/check.png'),
                                                                 tooltip: 'Valider Alerte',
                                                                 onPressed: () {
-                                                                  print("you clicked alerte c bon loul");
+                                                                  print("you clicked on validate alert");
+                                                                  Navigator.push(context
+                                                                   , MaterialPageRoute(builder: (context) => ChoixAmbilancier(alerte: widget.alerte,)));
+                                                                  
                                                                 
                                                                 },
                                                               )

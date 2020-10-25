@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
-import 'package:projet/SamuUi.dart/AlertList.dart';
-import 'package:projet/modals/Alerte.dart';
+import 'package:projet/modals/AlerteValide.dart';
 
 class AlertInfo extends StatefulWidget {
-  final Alerte alerte;
+  final AlerteValide alerte;
   AlertInfo({Key key, this.alerte}) : super(key: key);
 
   _AlertInfoState createState() => _AlertInfoState();
@@ -46,7 +45,7 @@ class _AlertInfoState extends State<AlertInfo> {
                                     Align(
                                  child: IconButton(
                                         icon: Icon(Icons.arrow_back),
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   alignment: Alignment.topLeft,
                                   padding: EdgeInsets.all(8.0),
                                 
@@ -134,14 +133,14 @@ class _AlertInfoState extends State<AlertInfo> {
                                      
                                    
                                     Text(
-                                "Name",
+                                "Nom",
                                 textAlign: TextAlign.left,
                                 style: TextStyle(fontWeight: FontWeight.w100),
                               ),
                              
                                Expanded(
                                     child: Text(
-                                  widget.alerte.name,
+                                  widget.alerte.nameEtu,
                                   textDirection: TextDirection.ltr,
                                   textAlign: TextAlign.right,
                                   style: TextStyle(fontWeight: FontWeight.w100),
@@ -154,6 +153,36 @@ class _AlertInfoState extends State<AlertInfo> {
                               
                             ),
                            SizedBox(height:16) ,
+                           Container(
+                            width:300,
+                              height:50.0,
+                              padding: EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              color:Colors.white,
+                               borderRadius:BorderRadius.circular(50.0),
+                              
+                            ),
+                          child:Row(
+                                  
+                                  children:<Widget>[
+                                    Text(
+                                "Evacuateur",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(fontWeight: FontWeight.w100),
+                              ),
+                              Expanded(
+                                  child: Text(
+                                widget.alerte.service,
+                                textDirection: TextDirection.ltr,
+                                textAlign: TextAlign.right,
+                                style: TextStyle(fontWeight: FontWeight.w100),
+                              ))
+                                 
+                                    
+                                  ]
+                                ),
+                         ),
+                         SizedBox(height: 16),
                             Container(
                             width:300,
                               height:50.0,

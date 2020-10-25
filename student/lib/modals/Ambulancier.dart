@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Ambulancier{
   String email;
   String name;
-  double numero;
+  String numero;
   String secteur;
   Ambulancier({this.email, this.name, this.numero, this.secteur});
 

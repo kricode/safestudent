@@ -309,6 +309,8 @@ class _AjoutetudiantPageState extends State<AjoutetudiantPage> {
 
   @override
   Widget build(BuildContext context) {
+        final snackbarajout = SnackBar(content: Text('Vous avez ajouté un Etudiant'));
+
     return Scaffold(
       appBar: AppBar(
         title:Text("Ajouter un étudiant"),
@@ -346,6 +348,8 @@ class _AjoutetudiantPageState extends State<AjoutetudiantPage> {
                                          etudiant = new Etudiant(name:_name, email: _email, password: _password, cas: _casController, departement: _departementController, image: 'non',);
           print(_name);
                    // singUp();
+                   Navigator.pop(context);
+                   Scaffold.of(context).showSnackBar(snackbarajout);
                                                                
                                           },
                                          ),
@@ -399,7 +403,7 @@ class _AjoutetudiantPageState extends State<AjoutetudiantPage> {
       
     );
   }
-  singUp() async {
+ void  singUp() async {
 
     if(_formKey.currentState.validate()){
       setState(() {
@@ -416,9 +420,12 @@ class _AjoutetudiantPageState extends State<AjoutetudiantPage> {
                 "name" : _name,
                 "email" : _email,
                 "role"  : "etudiant"
+                
               };
 
               service.addUserInfo(userDataMap);
+              return 
+
 
             
               Navigator.pushReplacement(context, MaterialPageRoute(

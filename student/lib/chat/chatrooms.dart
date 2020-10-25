@@ -149,13 +149,7 @@ class ChatRoomsTile extends StatelessWidget {
                     fontFamily: 'OverpassRegular',
                     fontWeight: FontWeight.w300)),
                     Spacer(),
-            Text(name,
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontFamily: 'OverpassRegular',
-                    fontWeight: FontWeight.w300))
+            
           ],
         ),
         

@@ -3,6 +3,7 @@ import 'package:projet/Admin/Student/AlertInfo.dart';
 import 'package:projet/Database/AuthService.dart';
 import 'package:projet/modals/Alerte.dart';
 import 'package:projet/Database/FirestoreService.dart';
+import 'package:projet/modals/AlerteValide.dart';
 import 'package:provider/provider.dart';
 
 class AlertList extends StatefulWidget {
@@ -19,7 +20,7 @@ class _AlertListState extends State<AlertList> {
     final FirestoreService firebaseServices = FirestoreService();
 
     return StreamProvider(
-        create: (BuildContext context) => firebaseServices.getAlerteList(),
+        create: (BuildContext context) => firebaseServices.getAlerteValide(),
          //child: iteminscription(),
          child: MaterialApp(home: AlertTile()));
   }
@@ -34,9 +35,10 @@ class AlertTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     
-List userList = Provider.of<List<Alerte>>(context);
+List userList = Provider.of<List<AlerteValide>>(context);
 
     return Material(
+      
           child: Container(child:  userList != null ? ListView.builder(
           
           itemCount: userList.length,
@@ -103,11 +105,11 @@ List userList = Provider.of<List<Alerte>>(context);
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
 
-                                    Text(userList[index].name, style: TextStyle(
+                                    Text(userList[index].nameEtu, style: TextStyle(
                                         fontSize: 20,
                                         fontFamily: 'Cardo',
                                     ),),
-                                    Text('${userList[index].cas} }', style: TextStyle(fontSize: 15, color: Colors.grey))
+                                    Text('${userList[index].service }', style: TextStyle(fontSize: 15, color: Colors.grey))
                                 ],
                               ),
                                   ),
