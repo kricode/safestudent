@@ -131,6 +131,54 @@ List userList = Provider.of<List<Etudiant>>(context);
                                           icon: new Image.asset('assets/images/trash.png'),
                                          tooltip: 'Supprimer Un Etudiant',
                                           onPressed: () {
+                                            showDialog(
+              
+                                                    context: context,
+                                                    builder: (BuildContext context) {
+                                                      return AlertDialog(
+                                                        title: Text('Voulez vous vraiment supprimer cet Etudiant?'),
+                                                        content: Stack(
+                                                          overflow: Overflow.visible,
+                                                          children: <Widget>[
+                                                            
+                                                            Form(
+                                                            
+                                                              child: Row(
+                                                                mainAxisSize: MainAxisSize.min,
+                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                children: <Widget>[
+
+                                                                  
+                                                                  SizedBox(height: 40,),
+                                                                  Padding(
+                                                                    padding: const EdgeInsets.all(8.0),
+                                                                    child: RaisedButton(
+                                                                      child: Text("Supprimer"),
+                                                                      onPressed: () {
+                                                                         service.removeStudent(userList[index].email);
+                                                                          Navigator.pop(context);
+                                                                          print("you clicked on Delete");
+                                                                        
+                                                                      },
+                                                                    ),
+                                                                  ),Padding(
+                                                                    padding: const EdgeInsets.all(8.0),
+                                                                    child: RaisedButton(
+                                                                      child: Text("Non"),
+                                                                      onPressed: () {
+                                                                        Navigator.pop(context);
+                                                                        
+                                                                        
+                                                                      },
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      );
+                });
                                            print("you clicked");
                                                                  
                                             },

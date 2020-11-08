@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 
 
 class MapInstance extends StatefulWidget {
@@ -22,10 +23,24 @@ class _MapInstanceState extends State<MapInstance> {
         ImageConfiguration(devicePixelRatio: 2.5),
         'assets/images/pin.png');
   }
+
+
+  var location = new Location();
+  LocationData locationdata;
+  _getlocation() async {
+    var pos = await location.getLocation();
+    setState(() {
+     locationdata = pos; 
+    });
+
+   
+    
+  }
     @override
   void initState() {
       super.initState();
       setCustomMapPin();
+      _getlocation();
   }
 
 
@@ -37,11 +52,10 @@ class _MapInstanceState extends State<MapInstance> {
   @override
   Widget build(BuildContext context) {
      final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
+    target: LatLng(locationdata.latitude, locationdata.longitude ),
     zoom: 14.4746,
   );
 
-  LatLng point = LatLng(37.43296265331129, -122.08832357078792);
 
    final CameraPosition _place = CameraPosition(
       bearing: 192.8334901395799,

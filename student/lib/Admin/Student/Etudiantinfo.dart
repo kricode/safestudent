@@ -284,9 +284,56 @@ class _EtudiantInfoState extends State<EtudiantInfo> {
                                           icon: new Image.asset('assets/images/trash.png'),
                                          tooltip: 'Supprimer Un Etudiant',
                                           onPressed: () {
-                                          service.removeStudent(widget.etudiant.email);
-                                          Navigator.pop(context);
-                                          Scaffold.of(context).showSnackBar(snackBarsuppression);
+                                          showDialog(
+              
+                                                    context: context,
+                                                    builder: (BuildContext context) {
+                                                      return AlertDialog(
+                                                        title: Text('Voulez vous vraiment supprimer cet Etudiant?'),
+                                                        content: Stack(
+                                                          overflow: Overflow.visible,
+                                                          children: <Widget>[
+                                                            
+                                                            Form(
+                                                            
+                                                              child: Row(
+                                                                mainAxisSize: MainAxisSize.min,
+                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                children: <Widget>[
+
+                                                                  
+                                                                  SizedBox(height: 40,),
+                                                                  Padding(
+                                                                    padding: const EdgeInsets.all(8.0),
+                                                                    child: RaisedButton(
+                                                                      child: Text("Supprimer"),
+                                                                      onPressed: () {
+                                                                         service.removeStudent(widget.etudiant.email);
+                                                                          Navigator.pop(context);
+                                                                          print("you clicked on Delete");
+                                                                          Scaffold.of(context).showSnackBar(snackBarsuppression);
+                                                                        
+                                                                      },
+                                                                    ),
+                                                                  ),Padding(
+                                                                    padding: const EdgeInsets.all(8.0),
+                                                                    child: RaisedButton(
+                                                                      child: Text("Non"),
+                                                                      onPressed: () {
+                                                                        Navigator.pop(context);
+                                                                        
+                                                                        
+                                                                      },
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      );
+                });
+                                          
 
 
                                            print("you clicked");

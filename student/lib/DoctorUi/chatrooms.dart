@@ -4,8 +4,8 @@ import '../helper/helperfunctions.dart';
 import '../helper/theme.dart';
 import '../database/AuthService.dart';
 import '../database/FirestoreService.dart';
-import '../chat/chat.dart';
-import '../chat/search.dart';
+import './chat.dart';
+import './search.dart';
 import 'package:flutter/material.dart';
 import '../Sign/connection.dart';
 
@@ -29,6 +29,7 @@ class _ChatRoomState extends State<ChatRoom> {
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return ChatRoomsTile(
+                    medecin: widget.actuel,
                     username: widget.actuel['name'],
                     name: snapshot.data.documents[index].data()['chatRoomId']
                         .toString()
@@ -103,8 +104,9 @@ class ChatRoomsTile extends StatelessWidget {
   final String username;
   final String name;
   final String chatRoomId;
+  final dynamic medecin;
 
-  ChatRoomsTile({this.name,@required this.chatRoomId, @required this.username});
+  ChatRoomsTile({this.name,@required this.chatRoomId, @required this.username, @required this.medecin});
 
   @override
   Widget build(BuildContext context) {
@@ -113,6 +115,7 @@ class ChatRoomsTile extends StatelessWidget {
         
         Navigator.push(context, MaterialPageRoute(
           builder: (context) => Chat(
+            info: medecin,
             title : name,
             myname: username,
             chatRoomId: chatRoomId,

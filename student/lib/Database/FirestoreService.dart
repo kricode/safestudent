@@ -3,6 +3,8 @@ import 'package:projet/modals/AlerteValide.dart';
 import 'package:projet/modals/Ambulancier.dart';
 
 import '../modals/Demande.dart';
+import '../modals/Message.dart';
+
 import '../modals/doctor.dart';
 import '../modals/Etudiant.dart';
 import '../modals/Utilisateur.dart';
@@ -11,6 +13,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirestoreService {
   FirebaseFirestore _db = FirebaseFirestore.instance;
+  var timestamp = Timestamp.now();
+ 
+ // var date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+
+  
 
   Future<void> saveDemande(Demande demande){
     return _db.collection('Demandes').doc(demande.email).set(demande.toMap());
@@ -106,9 +113,18 @@ Stream<List<Etudiant>> getStudentList() {
 
    Stream<List<Alerte>> getAlerteList() {
     return _db.collection('Alertes')
+       
         .snapshots()
         .map((snapShot) => snapShot.docs
         .map((document) => Alerte.fromFirestore(document.data()))
+        .toList());
+  }
+    Stream<List<Message>> getMessageList() {
+    return _db.collection('Messages')
+       
+        .snapshots()
+        .map((snapShot) => snapShot.docs
+        .map((document) => Message.fromFirestore(document.data()))
         .toList());
   }
   
@@ -187,6 +203,14 @@ Future<void> addUserInfo(userData) async {
         .where('name', isEqualTo: searchField)
         .get();
   }
+    searchByNameStudent(String searchField) {
+    return _db
+        .collection("users")
+        .where('name', isEqualTo: searchField)
+        .where('role', isEqualTo: 'etudiant')
+        .get();
+  }
+
 
   addChatRoom(chatRoom, chatRoomId) {
    return  _db

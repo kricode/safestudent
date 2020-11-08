@@ -174,6 +174,72 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                       ]
                                     ),
                              ),
+                              SizedBox(height:16) ,
+                              
+                                Container(
+                                width:300,
+                                  height:50.0,
+                                  padding: EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                  color:Colors.white,
+                                   borderRadius:BorderRadius.circular(50.0),
+                                  
+                                ),
+                              child:Row(
+                                      
+                                      children:<Widget>[
+                                         
+                                       
+                                        Text(
+                                    "Numero",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(fontWeight: FontWeight.w100),
+                                  ),
+                                  Expanded(
+                                      child: Text(
+                                    widget.doctor.numero,
+                                    textDirection: TextDirection.ltr,
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(fontWeight: FontWeight.w100),
+                                  ))
+                                     
+                                        
+                                      ]
+                                    ),
+                             ),
+                              SizedBox(height:16) ,
+                              
+                                Container(
+                                width:300,
+                                  height:50.0,
+                                  padding: EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                  color:Colors.white,
+                                   borderRadius:BorderRadius.circular(50.0),
+                                  
+                                ),
+                              child:Row(
+                                      
+                                      children:<Widget>[
+                                         
+                                       
+                                        Text(
+                                    "Adresse",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(fontWeight: FontWeight.w100),
+                                  ),
+                                  Expanded(
+                                      child: Text(
+                                    widget.doctor.adresse,
+                                    textDirection: TextDirection.ltr,
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(fontWeight: FontWeight.w100),
+                                  ))
+                                     
+                                        
+                                      ]
+                                    ),
+                             ),
                              SizedBox(height:50,),
                              IconButton(
                                               icon: new Image.asset('assets/images/trash.png'),

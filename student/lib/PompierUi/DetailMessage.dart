@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:projet/PompierUi/MapInstance.dart';
+import 'package:projet/PompierUi/MessageList.dart';
 import 'package:projet/PompierUi/acceuil.dart';
-import 'package:projet/modals/Alerte.dart';
-import 'ChoixAmbilancier.dart';
-class DetailPage extends StatefulWidget {
-  final Alerte alerte;
-  DetailPage({Key key, this.alerte}) : super(key: key);
+import 'package:projet/modals/Message.dart';
 
-  _DetailPageState createState() => _DetailPageState();
+class DetailMessage extends StatefulWidget {
+  final Message message;
+  DetailMessage({Key key, this.message}) : super(key: key);
+
+  _DetailMessageState createState() => _DetailMessageState();
 }
 
-class _DetailPageState extends State<DetailPage> {
+class _DetailMessageState extends State<DetailMessage> {
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -56,7 +55,7 @@ class _DetailPageState extends State<DetailPage> {
                               onPressed: (){
                                 Navigator.push(
                                 context,
-                                 MaterialPageRoute(builder: (context) => AcceuilPompier()),
+                                 MaterialPageRoute(builder: (context) => MessageList()),
                                 );
                               },
                               ),
@@ -75,7 +74,7 @@ class _DetailPageState extends State<DetailPage> {
                          color: Colors.white,
                          image: DecorationImage(
 
-                           image: widget.alerte.image != null ? NetworkImage(widget.alerte.image)  : AssetImage("assets/images/etudiant2.png"),
+                           image: AssetImage("assets/images/doctor.png"),
                            fit: BoxFit.cover,  
                          ),
                          borderRadius: BorderRadius.circular(70.0),
@@ -87,6 +86,41 @@ class _DetailPageState extends State<DetailPage> {
                        SizedBox(
                          height:30.0,
                        ),
+                       Container(
+                          width:300,
+                            height:50.0,
+                            padding: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            color:Colors.white,
+                             borderRadius:BorderRadius.circular(50.0),
+                          
+                          ),
+                          child:Row(
+                                
+                                children:<Widget>[
+                                   
+                                 
+                                  Text(
+                              "Temps",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontWeight: FontWeight.w100),
+                            ),
+                           
+                             Expanded(
+                                  child: Text(
+                                widget.message.temps.toDate().toString(),
+                                textDirection: TextDirection.ltr,
+                                textAlign: TextAlign.right,
+                                style: TextStyle(fontWeight: FontWeight.w100),
+                              )),
+                            
+                               
+                                  
+                                ]
+                              ),
+                            
+                          ),
+                          SizedBox(height: 30,),
                      Container(
                           width:300,
                             height:50.0,
@@ -102,14 +136,14 @@ class _DetailPageState extends State<DetailPage> {
                                    
                                  
                                   Text(
-                              "Name",
+                              "Medecin",
                               textAlign: TextAlign.left,
                               style: TextStyle(fontWeight: FontWeight.w100),
                             ),
                            
                              Expanded(
                                   child: Text(
-                                widget.alerte.name,
+                                widget.message.namedoc,
                                 textDirection: TextDirection.ltr,
                                 textAlign: TextAlign.right,
                                 style: TextStyle(fontWeight: FontWeight.w100),
@@ -121,7 +155,7 @@ class _DetailPageState extends State<DetailPage> {
                               ),
                             
                           ),
-                         SizedBox(height:16) ,
+                          SizedBox(height: 20,),
                           Container(
                           width:300,
                             height:50.0,
@@ -134,7 +168,41 @@ class _DetailPageState extends State<DetailPage> {
                           child:Row(
                                 
                                 children:<Widget>[
-                                   Icon(Icons.email,color: Colors.grey,),
+                                   
+                                 
+                                  Text(
+                              "Etudiant",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontWeight: FontWeight.w100),
+                            ),
+                           
+                             Expanded(
+                                  child: Text(
+                                widget.message.name,
+                                textDirection: TextDirection.ltr,
+                                textAlign: TextAlign.right,
+                                style: TextStyle(fontWeight: FontWeight.w100),
+                              )),
+                            
+                               
+                                  
+                                ]
+                              ),
+                            
+                          ),
+                         SizedBox(height:20) ,
+                          Container(
+                          width:300,
+                            height:50.0,
+                            padding: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            color:Colors.white,
+                             borderRadius:BorderRadius.circular(50.0),
+                          
+                          ),
+                          child:Row(
+                                
+                                children:<Widget>[
                                  
                                   Text(
                               "Email",
@@ -144,7 +212,7 @@ class _DetailPageState extends State<DetailPage> {
                            
                              Expanded(
                                   child: Text(
-                                widget.alerte.email,
+                                widget.message.email,
                                 textDirection: TextDirection.ltr,
                                 textAlign: TextAlign.right,
                                 style: TextStyle(fontWeight: FontWeight.w100),
@@ -178,7 +246,7 @@ class _DetailPageState extends State<DetailPage> {
                             ),
                             Expanded(
                                 child: Text(
-                              "cas",
+                              widget.message.description != null ?  widget.message.description : 'Cas non mentionné',
                               textDirection: TextDirection.ltr,
                               textAlign: TextAlign.right,
                               style: TextStyle(fontWeight: FontWeight.w100),
@@ -205,13 +273,13 @@ class _DetailPageState extends State<DetailPage> {
                                    
                                  
                                   Text(
-                              "Date De Naissance",
+                              "Adresse",
                               textAlign: TextAlign.left,
                               style: TextStyle(fontWeight: FontWeight.w100),
                             ),
                             Expanded(
                                 child: Text(
-                              widget.alerte.anniv.toDate().toString(),
+                              widget.message.adresse != null ?  widget.message.adresse : 'Adresse non mentionnée',
                               textDirection: TextDirection.ltr,
                               textAlign: TextAlign.right,
                               style: TextStyle(fontWeight: FontWeight.w100),
@@ -244,7 +312,7 @@ class _DetailPageState extends State<DetailPage> {
                            
                              Expanded(
                                   child: Text(
-                                widget.alerte.numero,
+                                widget.message.numero,
                                 textDirection: TextDirection.ltr,
                                 textAlign: TextAlign.right,
                                 style: TextStyle(fontWeight: FontWeight.w100),
@@ -263,11 +331,10 @@ class _DetailPageState extends State<DetailPage> {
                                                    
                                                                    child: IconButton(
                                                                      
-                                                                    icon: new Image.asset('assets/images/reject.png'),
-                                                                    tooltip: 'Supprimer Alerte',
+                                                                    icon: new Image.asset('assets/images/check.png'),
+                                                                    tooltip: 'Valider Le Message',
                                                                     onPressed: () {
-                                                                      print("you clicked supprimer alerte");
-                                                                      
+                                                                      print("you clicked supprimer message");
                                                                        
                                                                       
                                                                       
@@ -278,53 +345,7 @@ class _DetailPageState extends State<DetailPage> {
 
 
                           
-                          Padding(
-                               padding: const EdgeInsets.only(left: 60, right: 60, top: 30 ),
-                               child: Container(
-                                // height: 100,
-                                 child: Row(
-                                   mainAxisSize: MainAxisSize.max,
-                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                   children: [
-                                     Flexible(
-                                                 child: SizedBox(
-                                                   
-                                                                   child: IconButton(
-                                                                    icon: new Image.asset('assets/images/map.png'),
-                                                                    tooltip: 'Consulter Alerte sur la carte',
-                                                                    onPressed: () {
-                                                                      print("you clicked map");
-                                                                      var point = widget.alerte.place;
-                                                              double latitude = point.latitude;
-                                                              double longitude = point.longitude;
-
-                                                              print(latitude.toString());
-                                                            
-                                                              LatLng pointalerte = LatLng(latitude, longitude);
-                                                               Navigator.push(context
-                                                             , MaterialPageRoute(builder: (context) => MapInstance(point: pointalerte,)));
-                                                                      
-                                                                      
-                                                                    },
-                                                                  ),
-                                                                        ),
-                                     ),
-                                    IconButton(
-                                      
-                                                                  icon: new Image.asset('assets/images/check.png'),
-                                                                  tooltip: 'Affectter Un Ambulancier',
-                                                                  onPressed: () {
-                                                                    print("you clicked on validate alert");
-                                                                    Navigator.push(context
-                                                                     , MaterialPageRoute(builder: (context) => ChoixAmbilancier(alerte: widget.alerte,)));
-                                                                    
-                                                                  
-                                                                  },
-                                                                )
-                                   ],
-                                 ),
-                               ),
-                             )
+                         
                         
                         
                            ],

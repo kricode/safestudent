@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projet/Database/AuthService.dart';
 import 'package:projet/Database/FirestoreService.dart';
+import 'package:projet/PompierUi/acceuil.dart';
 import 'package:projet/modals/Alerte.dart';
 import 'package:projet/modals/Ambulancier.dart';
 import 'package:provider/provider.dart';
@@ -151,11 +152,11 @@ List userList = Provider.of<List<Ambulancier>>(context);
                                          tooltip: 'Envoyer un message',
                                           onPressed: () {
                                            print("you clicked on send message");
-                                           String message = 'Vous avez une Alerte /n Dont le cas est ${widget.alerte.cas} /n Nom de la personne : ${widget.alerte.name} /n Veuillez nous contacter';
+                                           String message = 'Vous avez une Alerte  Dont le cas est ${widget.alerte.cas}  Nom de la personne : ${widget.alerte.name}  Veuillez nous contacter';
                                            List<String> recipents = [widget.alerte.numero];
                                            //A essayer une fois i have reseau psk djezzy makach l credit xd
                                       //       sender.sendSms(new SmsMessage(widget.alerte.numero, 'Hello flutter!'));
-                                           SmsMessage messagesend = new SmsMessage(widget.alerte.numero, message);
+                                           SmsMessage messagesend = new SmsMessage( '0657146957', message);
                                           messagesend.onStateChanged.listen((state) {
                                             if (state == SmsMessageState.Sent) {
                                               print("SMS is sent!");
@@ -166,14 +167,16 @@ List userList = Provider.of<List<Ambulancier>>(context);
                                             }
                                           });
                                           sender.sendSms(messagesend);
-                                          AlerteValide alerteValide = new AlerteValide(ambu: userList[index].name ,anniv: widget.alerte.anniv
-                                          ,email: widget.alerte.email, location: widget.alerte.place, numero: widget.alerte.numero, 
-                                          temps: widget.alerte.temps, service: 'samu'  );
+                                          AlerteValide alerteValide = new AlerteValide( nameEtu: widget.alerte.name ,anniv: widget.alerte.anniv
+                                          ,email: widget.alerte.email, location: widget.alerte.place, numero: widget.alerte.numero, cas: widget.alerte.cas,
+                                          temps: widget.alerte.temps, service: 'samu', ambu: userList[index].name  );
                                           String alerteId = '${widget.alerte.name} _ ${userList[index].name} _ ${widget.alerte.temps.toDate().toString()} _ Pompier';
                                           print(alerteValide.ambu);
 
-                                          //service.valideAlerte(alerteValide, alerteId);
-                                          //service.removeAlert(widget.alerte.email);
+                                          service.valideAlerte(alerteValide, alerteId);
+                                          service.removeAlert(widget.alerte.email);
+                                           Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AcceuilPompier()));
                                            
                                           
                                            
@@ -203,15 +206,10 @@ List userList = Provider.of<List<Ambulancier>>(context);
           
           
      
-        ) : RaisedButton(
-          child: Text("press"),
-          onPressed: (){
-            print(userList);
-          },
-        )
-        //Center(
-            //      child: CircularProgressIndicator()
-       // ),
+        ) : 
+        Center(
+                 child: CircularProgressIndicator()
+        ),
         
         
       ),

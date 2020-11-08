@@ -44,6 +44,7 @@ dependencies:
   dropdownfield:
   sms:
   progress_indicators: ^0.1.5
+  flutter_speed_dial:
 
 
 
@@ -102,6 +103,7 @@ flutter:
    - assets/images/send.png
    - assets/images/protectionDz.png
    - assets/images/samu.png
+   - assets/images/add-chat.png
    
 
 

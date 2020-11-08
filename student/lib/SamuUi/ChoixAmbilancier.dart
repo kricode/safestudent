@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projet/Database/AuthService.dart';
 import 'package:projet/Database/FirestoreService.dart';
+import 'package:projet/SamuUi/acceuil.dart';
 import 'package:projet/modals/Alerte.dart';
 import 'package:projet/modals/Ambulancier.dart';
 import 'package:provider/provider.dart';
@@ -152,12 +153,12 @@ List userList = Provider.of<List<Ambulancier>>(context);
                                           onPressed: () {
                                            print("you clicked on send message");
                                            String message = 'Vous avez une Alerte  Dont le cas est ${widget.alerte.cas}  Nom de la personne : ${widget.alerte.name}  Veuillez nous contacter';
-                                           List<String> recipents = ['widget.alerte.numero'];
                                            //A essayer une fois i have reseau psk djezzy makach l credit xd
                                       //       sender.sendSms(new SmsMessage(widget.alerte.numero, 'Hello flutter!'));
-                                           SmsMessage messagesend = new SmsMessage('0696944541', message);
-                                          messagesend.onStateChanged.listen((state) {
+                                           SmsMessage messagesend = new SmsMessage(userList[index].numero, message);
+                                    /*      messagesend.onStateChanged.listen((state) {
                                             if (state == SmsMessageState.Sent) {
+                                              
                                               
                                               print("SMS is sent!");
                                             } else if (state == SmsMessageState.Delivered) {
@@ -165,20 +166,18 @@ List userList = Provider.of<List<Ambulancier>>(context);
                                             } else {
                                               print("error");
                                             }
-                                          });
+                                          });*/
                                           sender.sendSms(messagesend);
-                                          AlerteValide alerteValide = new AlerteValide(nameambu: userList[index].name , nameEtu: widget.alerte.name ,anniv: widget.alerte.anniv
+                                          AlerteValide alerteValide = new AlerteValide( nameEtu: userList[index].name ,anniv: widget.alerte.anniv
                                           ,email: widget.alerte.email, location: widget.alerte.place, numero: widget.alerte.numero, cas: widget.alerte.cas,
-                                          temps: widget.alerte.temps, service: 'samu'  );
+                                          temps: widget.alerte.temps, service: 'samu', ambu: userList[index].name );
                                           String alerteId = '${widget.alerte.name} _ ${userList[index].name} _ ${widget.alerte.temps.toDate().toString()} _ Samu';
-                                          print(alerteValide.ambu);
+                                          
 
                                           service.valideAlerte(alerteValide, alerteId);
                                           service.removeAlert(widget.alerte.email);
-                                          Navigator.pop(context) ;                       
-                                          
-                                           
-                                                                 
+                                           Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AcceuilSamu()));                                         
                                             },
                                            ),
                             ),

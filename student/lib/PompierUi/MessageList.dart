@@ -1,80 +1,73 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:projet/Database/AuthService.dart';
-import 'package:projet/Database/FirestoreService.dart';
-import 'package:projet/SamuUi/DetailPage.dart';
-import 'package:projet/SamuUi/MapInstance.dart';
-import 'package:projet/SamuUi/MessageList.dart';
-import 'package:projet/Sign/connection.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
-import 'package:projet/modals/Alerte.dart';
-import 'package:projet/widget/AddAmbu.dart';
+import 'package:projet/Database/FirestoreService.dart';
+import 'package:projet/PompierUi/DetailMessage.dart';
+import 'package:projet/modals/Message.dart';
 import 'package:provider/provider.dart';
 
 
-class AlertList extends StatefulWidget {
-  AlertList({Key key}) : super(key: key);
-   
-   Alerte alerte ;
 
+class MessageList extends StatefulWidget {
+  MessageList({Key key}) : super(key: key);
 
-  _AlertListState createState() => _AlertListState();
+  _MessageListState createState() => _MessageListState();
 }
 
-class _AlertListState extends State<AlertList> {
-   final FirestoreService service = FirestoreService();
-   final  AuthService authService = new AuthService();
+class _MessageListState extends State<MessageList> {
+  @override
+  Widget build(BuildContext context) {
+     final FirestoreService firebaseServices = FirestoreService();
+
+    return StreamProvider(
+        create: (BuildContext context) => firebaseServices.getMessageList(),
+         //child: iteminscription(),
+         child: MaterialApp(home: MessageTile()));
+  }
+}
+
+
+class MessageTile extends StatefulWidget {
+  MessageTile({Key key}) : super(key: key);
+
+  _MessageTileState createState() => _MessageTileState();
+}
+
+class _MessageTileState extends State<MessageTile> {
 
   @override
   Widget build(BuildContext context) {
-   List userList = Provider.of<List<Alerte>>(context);
+       List messageList = Provider.of<List<Message>>(context);
 
     return Scaffold(
-      appBar : AppBar(
-      elevation: 50,
-      backgroundColor: Color(0x9A4da6ff),
-      title: Text("Safe Student", style: TextStyle(fontFamily: "Cardo"),),
-      actions: <Widget>[
-        IconButton(
-          icon: Icon(Icons.exit_to_app),
-          onPressed: () {
-            authService.signOut();
-            Navigator.pop(context);
-          },
-        )
-      ],
-    ),
-      body:
-          Container(
-            decoration: new BoxDecoration(color: Color(0x1Acce6ff)),
+       body: Container(
+            decoration: new BoxDecoration(color: Color(0x1A102b3c)),
             child: Column(
               children: [
                 Stack(
                   children: [
                     
-                   ClipPath(
+                    ClipPath(
                     clipper: WaveClipperOne(),
                     child: Container(
-                      height: 120,
-                      color: Color(0x8A0073e6),
+                      height: 160,
+                      color: Color.fromRGBO(58, 66, 86, 1.0),
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Row(
                           children: [
-
+                            
                             Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: Container(
                                 height: 70,
-                                child: Image(image: AssetImage('assets/images/samu.png')),
+                                child: Image(image: AssetImage('assets/images/protectionDz.png')),
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(20, 30, 0, 50),
-                              child: Text("Alertes", style: TextStyle(
+                              child: Text("Messages Reçus", style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 30,
+                                fontSize: 20,
                                 fontFamily: "Cardo",
                               ),),
                             )
@@ -87,17 +80,19 @@ class _AlertListState extends State<AlertList> {
               
             
             Expanded(
-              child:userList != null ? 
+              child:messageList != null ? 
             ListView.builder(
               
-              itemCount: userList.length,
-                itemBuilder: (_, int index) =>  Padding(
+              itemCount: messageList.length,
+              itemBuilder: (_, int index) => Padding(
                 padding: EdgeInsets.all(10.0),
                 child: SafeArea(
               child: SingleChildScrollView(
 
                padding: EdgeInsets.all(4),
-                        child: Container(
+                        child:
+
+                        Container(
                  
                                   width:1000,
                                   height: 100.0,
@@ -120,8 +115,9 @@ class _AlertListState extends State<AlertList> {
                                     children:<Widget>[
                                       GestureDetector(
                                         onTap: (){
-                                          Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => DetailPage(alerte: userList[index],)));
+                                             Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => DetailMessage(message:  messageList[index],)));
+                                        
                                         },
                                        child: Container(
                                           child: Row(
@@ -138,7 +134,7 @@ class _AlertListState extends State<AlertList> {
                                                                 shape: BoxShape.circle,
                                                                 image: new DecorationImage(
                                                                 fit: BoxFit.fitWidth,
-                                                                image: userList[index].image != null ? NetworkImage(userList[index].image)  :AssetImage('assets/images/etudiant2.png')
+                                                                image: AssetImage('assets/images/doctor.png')
                                                       )
                             )),
                                               ),
@@ -154,11 +150,11 @@ class _AlertListState extends State<AlertList> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
 
-                                    Text(userList[index].name, style: TextStyle(
+                                    Text(messageList[index].namedoc, style: TextStyle(
                                         fontSize: 20,
                                         fontFamily: 'Cardo',
                                     ),),
-                                    Text(userList[index].cas, style: TextStyle(fontSize: 15, color: Colors.grey))
+                                    Text(messageList[index].numero, style: TextStyle(fontSize: 15, color: Colors.grey))
                                 ],
                               ),
                                   ),
@@ -179,23 +175,15 @@ class _AlertListState extends State<AlertList> {
                              SizedBox(height:4) ,      
                                                    Flexible(
                                                        child: SizedBox(
-                                                       width:100.0,
+                                                       width:50.0,
                                                        height: 60,
                                                                                                   
                                                             
                                                             child:  IconButton(
-                                                            icon: new Image.asset('assets/images/map.png'),
-                                                            tooltip: 'Closes application',
+                                                            icon: new Image.asset('assets/images/check.png'),
+                                                            tooltip: 'Montrer Alerte sur la carte',
                                                             onPressed: () {
-                                                              var point = userList[index].place;
-                                                              double latitude = point.latitude;
-                                                              double longitude = point.longitude;
-
-                                                              print(latitude.toString());
-                                                            
-                                                              LatLng pointalerte = LatLng(latitude, longitude);
-                                                               Navigator.push(context
-                                                       , MaterialPageRoute(builder: (context) => MapInstance(point: pointalerte,)));
+                                                             
                                                             },
                                                           )
                                                          ),
@@ -214,7 +202,7 @@ class _AlertListState extends State<AlertList> {
                                           ),
               ),
               ),
-              ) 
+              ),
             
       ) : Center(
         child: Column(
@@ -238,51 +226,6 @@ class _AlertListState extends State<AlertList> {
         ],
       ),
           ),
-          floatingActionButton: SpeedDial(
-          animatedIcon: AnimatedIcons.menu_close,
-          animatedIconTheme: IconThemeData(size: 22),
-          backgroundColor: Color(0x9A4da6ff),
-          visible: true,
-          curve: Curves.bounceIn,
-          children: [
-                // FAB 1
-                SpeedDialChild(
-                child: Icon(Icons.add),
-                backgroundColor: Color(0x9A4da6ff),
-                onTap: () { 
-                       print("Ajouter un ambulancier");
-                                Navigator.push(context,
-                                            MaterialPageRoute(builder: (context) => AddAmbu(secteur: "samu",),
-                                                ));
-                 
-                  },
-                label: 'Ajoutez Un Ambulancier',
-                labelStyle: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                    fontSize: 16.0),
-                labelBackgroundColor: Color(0x9A4da6ff)),
-                // FAB 2
-                SpeedDialChild(
-                child: Icon(Icons.inbox),
-                backgroundColor: Color(0x9A4da6ff),
-                onTap: () {
-                  Navigator.push(context,
-                                            MaterialPageRoute(builder: (context) => MessageList()),
-                                                );
-                  
-                   
-                },
-                label: 'Messages Des Medecins',
-                labelStyle: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                    fontSize: 16.0),
-                labelBackgroundColor: Color(0x9A4da6ff))
-          ],
-        )
-        
-          );
-          
+    );
   }
 }

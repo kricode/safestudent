@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:projet/SamuUi/MapInstance.dart';
 import 'package:projet/SamuUi/acceuil.dart';
 import 'package:projet/modals/Alerte.dart';
 import 'ChoixAmbilancier.dart';
@@ -262,48 +263,74 @@ class _DetailPageState extends State<DetailPage> {
                        
 
                         
-                        Padding(
-                             padding: const EdgeInsets.all(60.0),
-                             child: Container(
-                               height: 100,
-                               child: Row(
-                                 mainAxisSize: MainAxisSize.max,
-                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                 children: [
-                                   Flexible(
-                                               child: SizedBox(
+                       SizedBox(height: 40,),
+                           
+                           SizedBox(
                                                  
-                                                                 child: IconButton(
-                                                                  icon: new Image.asset('assets/images/map.png'),
-                                                                  tooltip: 'Consulter Alerte sur la carte',
+                                                   
+                                                                   child: IconButton(
+                                                                     
+                                                                    icon: new Image.asset('assets/images/reject.png'),
+                                                                    tooltip: 'Supprimer Alerte',
+                                                                    onPressed: () {
+                                                                      print("you clicked supprimer alerte");
+                                                                      
+                                                                      
+                                                                    },
+                                                                  ),
+                                                                        ),
+                                     
+
+
+                          
+                          Padding(
+                               padding: const EdgeInsets.only(left: 60, right: 60, top: 30 ),
+                               child: Container(
+                                // height: 100,
+                                 child: Row(
+                                   mainAxisSize: MainAxisSize.max,
+                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                   children: [
+                                     Flexible(
+                                                 child: SizedBox(
+                                                   
+                                                                   child: IconButton(
+                                                                    icon: new Image.asset('assets/images/map.png'),
+                                                                    tooltip: 'Consulter Alerte sur la carte',
+                                                                    onPressed: () {
+                                                                      print("you clicked map");
+                                                                      
+                                                                      var point = widget.alerte.place;
+                                                              double latitude = point.latitude;
+                                                              double longitude = point.longitude;
+
+                                                              print(latitude.toString());
+                                                            
+                                                              LatLng pointalerte = LatLng(latitude, longitude);
+                                                               Navigator.push(context
+                                                             , MaterialPageRoute(builder: (context) => MapInstance(point: pointalerte,)));
+                                                                      
+                                                                    },
+                                                                  ),
+                                                                        ),
+                                     ),
+                                    IconButton(
+                                      
+                                                                  icon: new Image.asset('assets/images/check.png'),
+                                                                  tooltip: 'Affectter Un Ambulancier',
                                                                   onPressed: () {
-                                                                     LatLng alerte = LatLng(widget.alerte.place.latitude, widget.alerte.place.longitude);
-
+                                                                    print("you clicked on validate alert");
+                                                                    Navigator.push(context
+                                                                     , MaterialPageRoute(builder: (context) => ChoixAmbilancier(alerte: widget.alerte,)));
                                                                     
-
-                                                                    print("you heyed map");
-
-                                                                    
-                                                                  },
-                                                                ),
-                                                                      ),
-                                   ),
-                                  IconButton(
-                                    
-                                                                icon: new Image.asset('assets/images/check.png'),
-                                                                tooltip: 'Valider Alerte',
-                                                                onPressed: () {
-                                                                  print("you clicked on validate alert");
-                                                                  Navigator.push(context
-                                                                   , MaterialPageRoute(builder: (context) => ChoixAmbilancier(alerte: widget.alerte,)));
                                                                   
-                                                                
-                                                                },
-                                                              )
-                                 ],
+                                                                  },
+                                                                )
+                                   ],
+                                 ),
                                ),
-                             ),
-                           )
+                             )
+                        
                       
                       
                          ],

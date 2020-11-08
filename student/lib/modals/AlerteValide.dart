@@ -6,7 +6,6 @@ import 'package:geoflutterfire/geoflutterfire.dart';
 
 class AlerteValide{
   String id;
-    String nameambu;
     String nameEtu;
     String numero;
     String email;
@@ -17,11 +16,11 @@ class AlerteValide{
    GeoPoint location;
    String service;
    String ambu;
-     AlerteValide({this.id ,this.nameambu, this.nameEtu, this.email, this.cas, this.location,this.temps, this.numero, this.anniv, this.image, this.ambu, this.service});
+     AlerteValide({this.id , this.nameEtu, this.email, this.cas, this.location,this.temps, this.numero, this.anniv, this.image, this.ambu, this.service});
  
  Map<String,dynamic> toMap(){
     return {
-      'nameambu': nameambu,
+      
       'nameEtu' : nameEtu,
     'email': email,
     'numero' : numero,
@@ -39,7 +38,7 @@ class AlerteValide{
 
 AlerteValide.fromFirestore(Map<String, dynamic> firestore):
        
-        nameambu = firestore['nameambu'],
+        
                 nameEtu = firestore['nameEtu'],
 
         email = firestore['email'],

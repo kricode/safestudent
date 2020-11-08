@@ -20,7 +20,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData.light(),
       debugShowCheckedModeBanner: false,
-      home: AcceuilSamu(),
+      home: admin(),
+
     );
   }
 }

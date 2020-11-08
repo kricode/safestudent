@@ -8,15 +8,21 @@ class Doctor{
   String password;
   String specialite;
   String image;
+  String adresse;
+  String numero;
 
-  Doctor({this.name, this.email, this.password, this.specialite, this.image});
+  Doctor({this.name, this.email, this.password, this.specialite, this.image, this.adresse, this.numero});
   Map<String,dynamic> toMap(){
     return {
       'name': name,
     'email': email,
     'password': password,
     'specialite': specialite,
-    'image' : image
+
+    'image' : image,
+    'adresse': adresse,
+
+    'numero' : numero
     
    
     };
@@ -26,6 +32,8 @@ class Doctor{
         email = firestore['email'],
         password = firestore['password'],
         specialite = firestore['specialite'],
+        adresse = firestore['adresse'],
+        numero = firestore['numero'],
         image = firestore['image']
        
         ;

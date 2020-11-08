@@ -117,7 +117,7 @@ class _AlertInfoState extends State<AlertInfo> {
                               
                             ),
 
-
+                      SizedBox(height: 30,),
                        Container(
                             width:300,
                               height:50.0,
@@ -173,6 +173,36 @@ class _AlertInfoState extends State<AlertInfo> {
                               Expanded(
                                   child: Text(
                                 widget.alerte.service,
+                                textDirection: TextDirection.ltr,
+                                textAlign: TextAlign.right,
+                                style: TextStyle(fontWeight: FontWeight.w100),
+                              ))
+                                 
+                                    
+                                  ]
+                                ),
+                         ),
+                         SizedBox(height:16) ,
+                           Container(
+                            width:300,
+                              height:50.0,
+                              padding: EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              color:Colors.white,
+                               borderRadius:BorderRadius.circular(50.0),
+                              
+                            ),
+                          child:Row(
+                                  
+                                  children:<Widget>[
+                                    Text(
+                                "Ambulancier",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(fontWeight: FontWeight.w100),
+                              ),
+                              Expanded(
+                                  child: Text(
+                                widget.alerte.ambu,
                                 textDirection: TextDirection.ltr,
                                 textAlign: TextAlign.right,
                                 style: TextStyle(fontWeight: FontWeight.w100),
@@ -317,6 +347,7 @@ class _AlertInfoState extends State<AlertInfo> {
                                 ),
                               
                             ),
+                            SizedBox(height: 60,)
 
                             
                           

@@ -13,8 +13,9 @@ class Alerte{
     Timestamp anniv;
     Timestamp temps;
     String image;
+   
    GeoPoint place;
-     Alerte({this.id ,this.name, this.email, this.cas, this.place ,this.temps, this.numero, this.anniv, this.image});
+     Alerte({this.id ,this.name, this.email, this.cas, this.place ,this.temps, this.numero});
  
  Map<String,dynamic> toMap(){
     return {
@@ -25,7 +26,8 @@ class Alerte{
     'cas' : cas ,
     'place' : place,
     'anniv' : anniv,
-    'image' : image
+    'image' : image,
+    
 
    
     };
@@ -45,4 +47,5 @@ Alerte.fromFirestore(Map<String, dynamic> firestore):
 
         numero = firestore['numero'],
         image = firestore['image'];
+       
 }

@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:projet/Database/AuthService.dart';
 import 'package:projet/Database/FirestoreService.dart';
 import 'package:projet/PompierUi./DetailPage.dart';
 import 'package:projet/PompierUi/MapInstance.dart';
+import 'package:projet/PompierUi/MessageList.dart';
 import 'package:projet/Sign/connection.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:projet/modals/Alerte.dart';
+import 'package:projet/widget/AddAmbu.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 
 class AlertList extends StatefulWidget {
@@ -30,7 +34,7 @@ class _AlertListState extends State<AlertList> {
       appBar : AppBar(
       elevation: 50,
       backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
-      title: Text("Safe Kid"),
+      title: Text("Safe Student"),
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.exit_to_app),
@@ -93,7 +97,9 @@ class _AlertListState extends State<AlertList> {
               child: SingleChildScrollView(
 
                padding: EdgeInsets.all(4),
-                        child: Container(
+                        child:
+
+                        Container(
                  
                                   width:1000,
                                   height: 100.0,
@@ -175,17 +181,23 @@ class _AlertListState extends State<AlertList> {
                              SizedBox(height:4) ,      
                                                    Flexible(
                                                        child: SizedBox(
-                                                       width:100.0,
+                                                       width:50.0,
                                                        height: 60,
                                                                                                   
                                                             
                                                             child:  IconButton(
                                                             icon: new Image.asset('assets/images/map.png'),
-                                                            tooltip: 'Closes application',
+                                                            tooltip: 'Montrer Alerte sur la carte',
                                                             onPressed: () {
-                                                              print("you clicked");
+                                                              var point = userList[index].place;
+                                                              double latitude = point.latitude;
+                                                              double longitude = point.longitude;
+
+                                                              print(latitude.toString());
+                                                            
+                                                              LatLng pointalerte = LatLng(latitude, longitude);
                                                                Navigator.push(context
-                                                       , MaterialPageRoute(builder: (context) => MapInstance()));
+                                                       , MaterialPageRoute(builder: (context) => MapInstance(point: pointalerte,)));
                                                             },
                                                           )
                                                          ),
@@ -227,7 +239,53 @@ class _AlertListState extends State<AlertList> {
 
         ],
       ),
-          ));
+          ),
+           floatingActionButton: SpeedDial(
+          animatedIcon: AnimatedIcons.menu_close,
+          animatedIconTheme: IconThemeData(size: 22),
+          backgroundColor: Color(0x9A102b3c),
+          visible: true,
+          curve: Curves.bounceIn,
+          children: [
+                // FAB 1
+                SpeedDialChild(
+                child: Icon(Icons.add),
+                backgroundColor: Color(0x5A102b3c),
+                onTap: () { 
+                       print("Ajouter un ambulancier");
+                                Navigator.push(context,
+                                            MaterialPageRoute(builder: (context) => AddAmbu(secteur: "pompier",),
+                                                ));
+                 
+                  },
+                label: 'Ajoutez Un Ambulancier',
+                labelStyle: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                    fontSize: 16.0),
+                labelBackgroundColor: Color(0x5A102b3c)),
+                // FAB 2
+                SpeedDialChild(
+                child: Icon(Icons.inbox),
+                backgroundColor: Color(0x5A102b3c),
+                onTap: () {
+                  Navigator.push(context,
+                                            MaterialPageRoute(builder: (context) => MessageList()),
+                                                );
+                  
+                   
+                },
+                label: 'Messages Des Medecins',
+                labelStyle: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                    fontSize: 16.0),
+                labelBackgroundColor: Color(0x5A102b3c))
+          ],
+        )
+          
+          
+          );
           
   }
 }

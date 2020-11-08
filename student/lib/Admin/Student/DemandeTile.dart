@@ -117,7 +117,7 @@ List userList = Provider.of<List<Demande>>(context);
                                          print("you clicked");
                                          uti  utilisateur = new uti(name: userList[index].name, email: userList[index].email, role: 'etudiant', password: userList[index].password);
 
-                                                    //  service.saveUser(utilisateur);
+                                                     service.saveUser(utilisateur);
                                                       service.validerDemande(userList[index]);
                                                       singUp(userList[index].name.toString(), userList[index].email.toString(), userList[index].password.toString() ).then(
                                                       service.removeDemande(userList[index].email));
@@ -131,9 +131,55 @@ List userList = Provider.of<List<Demande>>(context);
                                         icon: new Image.asset('assets/images/reject.png'),
                                        tooltip: 'Rejeter une demande',
                                         onPressed: () {
-                                          service.removeDemande(userList[index].email);
-                                          Scaffold.of(context).showSnackBar(snackBarsuppression);
-                                         print("you clicked");
+                                          showDialog(
+              
+                                                    context: context,
+                                                    builder: (BuildContext context) {
+                                                      return AlertDialog(
+                                                        title: Text('Voulez vous vraiment supprimer cette demande?'),
+                                                        content: Stack(
+                                                          overflow: Overflow.visible,
+                                                          children: <Widget>[
+                                                            
+                                                            Form(
+                                                            
+                                                              child: Row(
+                                                                mainAxisSize: MainAxisSize.min,
+                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                children: <Widget>[
+
+                                                                  
+                                                                  SizedBox(height: 40,),
+                                                                  Padding(
+                                                                    padding: const EdgeInsets.all(8.0),
+                                                                    child: RaisedButton(
+                                                                      child: Text("Supprimer"),
+                                                                      onPressed: () {
+                                                                         service.removeDemande(userList[index].email);
+                                                                          Navigator.pop(context);
+                                                                          print("you clicked on Delete");
+                                                                        
+                                                                      },
+                                                                    ),
+                                                                  ),Padding(
+                                                                    padding: const EdgeInsets.all(8.0),
+                                                                    child: RaisedButton(
+                                                                      child: Text("Non"),
+                                                                      onPressed: () {
+                                                                        Navigator.pop(context);
+                                                                        
+                                                                        
+                                                                      },
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      );
+                });
+                                        
                                                                
                                           },
                                          ),

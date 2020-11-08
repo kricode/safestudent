@@ -271,8 +271,55 @@ uti utilisateur;
                                                                   icon: new Image.asset('assets/images/reject.png'),
                                                                   tooltip: 'Rejeter La Demande',
                                                                   onPressed: () {
-                                                                   //service.removeDemande(widget.demande.email);
-                                                                     Navigator.pop(context);
+                                                                   showDialog(
+              
+                                                    context: context,
+                                                    builder: (BuildContext context) {
+                                                      return AlertDialog(
+                                                        title: Text('Voulez vous vraiment supprimer cette demande?'),
+                                                        content: Stack(
+                                                          overflow: Overflow.visible,
+                                                          children: <Widget>[
+                                                            
+                                                            Form(
+                                                            
+                                                              child: Row(
+                                                                mainAxisSize: MainAxisSize.min,
+                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                children: <Widget>[
+
+                                                                  
+                                                                  SizedBox(height: 40,),
+                                                                  Padding(
+                                                                    padding: const EdgeInsets.all(8.0),
+                                                                    child: RaisedButton(
+                                                                      child: Text("Supprimer"),
+                                                                      onPressed: () {
+                                                                         service.removeStudent(widget.demande.email);
+                                                                          Navigator.pop(context);
+                                                                          print("you clicked on Delete");
+                                                                        
+                                                                      },
+                                                                    ),
+                                                                  ),Padding(
+                                                                    padding: const EdgeInsets.all(8.0),
+                                                                    child: RaisedButton(
+                                                                      child: Text("Non"),
+                                                                      onPressed: () {
+                                                                        Navigator.pop(context);
+                                                                        
+                                                                        
+                                                                      },
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      );
+                });
+                                                                     
                                                                      Scaffold.of(context).showSnackBar(snackBarsuppression);
                                                                     print("you clicked suppression");
                                                                     

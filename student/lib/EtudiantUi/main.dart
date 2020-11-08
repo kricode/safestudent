@@ -8,6 +8,8 @@ import 'package:projet/Database/FirestoreService.dart';
 import 'package:projet/modals/Alerte.dart';
 import '../Sign/connection.dart';
 import '../chat/chatrooms.dart';
+import 'package:sms/sms.dart';
+
 import 'package:location/location.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:projet/EtudiantUi/assistance.dart';
@@ -20,7 +22,6 @@ class MyApp extends StatelessWidget {
      FirestoreService service = FirestoreService();
  
    
-    Location _location;
     
   @override
   Widget build(BuildContext context) {
@@ -37,9 +38,8 @@ class HomeScreen extends StatefulWidget {
 FirebaseAuth auth = FirebaseAuth.instance;
 FirestoreService service = FirestoreService();
 AuthService serviceauth = AuthService();
-String emailuser = auth.currentUser.email;
 
-String _locationmessage='';
+
   FirebaseFirestore _db = FirebaseFirestore.instance;
 
 
@@ -81,18 +81,33 @@ class _HomeScreenState extends State<HomeScreen> {
                 DateTime time =  DateTime.now();
                 _getlocation();
                GeoFirePoint point = geo.point(latitude: locationdata.latitude, longitude: locationdata.longitude);
-              //  alert = new Alerte(name: donnee['name'], email: donnee['email'], numero: donnee['numero'], temps: Timestamp.fromDate(time), anniv: donnee['anniv'], location: point.data);
+              //  alert = new Alerte(name: donnee['name'], email: donnee['email'], numero: donnee['numero'], temps: Timestamp.fromDate(time), anniv: donnee['anniv'], place: point.data);
               
-                             // service.saveAlerte(alert);
-                _db.collection('Alertes').doc(donnee['email']).set({ 
+                  //           service.saveAlerte(alert);
+              _db.collection('Alertes').doc(donnee['email']).set({ 
     'name': donnee['name'],
     'email': donnee['email'],
     'numero' : donnee['numero'],
     'temps' : Timestamp.fromDate(time) ,
     'cas' : donnee['cas'] ,
     'place' : point.data,
+    'role' : 'etudiant',
+
     'anniv' : donnee['anniv']
   });
+                 String message = 'Vous Avez Une Nouvelle Alerte';
+                                           
+                                           //A essayer une fois i have reseau psk djezzy makach l credit xd
+                                           SmsMessage messagesend = new SmsMessage( '0657146957', message);
+                                          messagesend.onStateChanged.listen((state) {
+                                            if (state == SmsMessageState.Sent) {
+                                              print("SMS is sent!");
+                                            } else if (state == SmsMessageState.Delivered) {
+                                              print("SMS is delivered!");
+                                            } else {
+                                              print("error");
+                                            }
+                                          });
                 Navigator.of(context).pop(word.toString());
               }
             ),
@@ -111,11 +126,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
      );
    });
-   
+    
  }
      var donnee;
        Future<dynamic> getData() async {
-    FirebaseFirestore.instance.collection("Etudiants").doc(emailuser).get().then((value){
+    FirebaseFirestore.instance.collection("Etudiants").doc(auth.currentUser.email).get().then((value){
       print(value.data());
       setState(() {
        donnee = value;

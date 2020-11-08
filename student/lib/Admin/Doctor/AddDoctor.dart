@@ -1,6 +1,7 @@
 import 'package:dropdownfield/dropdownfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:projet/Database/AuthService.dart';
 import 'package:projet/Database/FirestoreService.dart';
@@ -36,19 +37,7 @@ class _AddDoctorState extends State<AddDoctor> {
 
      utif =  await authService.signUpWithEmailAndPassword(email,
           email).then((result){
-            if(result != null){
-              
-                
-              Map<String,String> userDataMap = {
-                "name" : name ,
-                "email" : email,
-                "role"  : "etudiant"
-                
-              };
-
-              service.addUserInfo(userDataMap);
-             
-            }
+        
       });
     
   }
@@ -59,6 +48,8 @@ class _AddDoctorState extends State<AddDoctor> {
    TextEditingController _name = TextEditingController();
    TextEditingController _email = TextEditingController();
    TextEditingController _password = TextEditingController();
+   TextEditingController _adresse = TextEditingController();
+   TextEditingController _numero = TextEditingController();
    String _specialite;
   @override
   Widget build(BuildContext context) {
@@ -75,7 +66,7 @@ class _AddDoctorState extends State<AddDoctor> {
               ClipPath(
             clipper: WaveClipperOne(),
             child: Container(
-              height: 200,
+              height: 150,
               color: Colors.blue[200],
               child: Center(child: Align(
                 alignment: Alignment.centerLeft,
@@ -313,6 +304,132 @@ class _AddDoctorState extends State<AddDoctor> {
                         
                                 ),
                               ),
+                           Column(
+                            
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 50.0, bottom: 8),
+                                  child: Text(
+                                    "Adresse",
+                                    style: TextStyle(
+                                      fontFamily: 'Product Sans',
+                                      fontSize: 15,
+                                      color: Color(0xff8f9db5),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              //
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(40, 0, 40, 10),
+                                child: TextFormField(
+                                   validator: (val) {
+                              return val.length > 8
+                                  ? null
+                                  : "Entrez Adresse du Médecin";
+                            },
+                                  
+                                  controller:  _adresse,
+                                  
+                                  style: TextStyle(
+                                     
+                                    
+                                      fontSize: 18,
+                                      color: Color(0xff0962ff),
+                                      fontWeight: FontWeight.bold),
+                                  decoration: InputDecoration(
+                                    prefixIcon: Icon(Icons.location_city),
+                                    hintText: "Cite 100 lgts......",
+                                    hintStyle: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey[350],
+                                        fontWeight: FontWeight.w600),
+                                    contentPadding:
+                                        EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                    focusColor: Color(0xff0962ff),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(color: Color(0xff0962ff)),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(
+                                        color: Colors.grey[350],
+                                      ),
+                                    ),
+                                    
+                                  ),
+                                ),
+                              ),
+                              //
+                            ],
+                          ),
+                          Column(
+                            
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 50.0, bottom: 8),
+                                  child: Text(
+                                    "Numero Du Medecin",
+                                    style: TextStyle(
+                                      fontFamily: 'Product Sans',
+                                      fontSize: 15,
+                                      color: Color(0xff8f9db5),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              //
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(40, 0, 40, 10),
+                                child: TextFormField(
+                                  keyboardType: TextInputType.number,
+                                                              inputFormatters: <TextInputFormatter>[
+                                                      FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10),
+                                                  ], 
+                                  
+                                  validator: (val) {
+                              return val.length == 10  
+                                  ? null
+                                  : "Entrez Un Numero Valide";
+                            },
+                                  controller: _numero,
+                                  
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Color(0xff0962ff),
+                                      fontWeight: FontWeight.bold),
+                                  decoration: InputDecoration(
+                                    prefixIcon: Icon(Icons.phone),
+                                    hintText: "0660526352",
+                                    hintStyle: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey[350],
+                                        fontWeight: FontWeight.w600),
+                                    contentPadding:
+                                        EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                    focusColor: Color(0xff0962ff),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(color: Color(0xff0962ff)),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(
+                                        color: Colors.grey[350],
+                                      ),
+                                    ),
+                                    
+                                  ),
+                                ),
+                              ),
+                              //
+                            ],
+                          ),
 
                       SizedBox(height: 30,),
                       Row(
@@ -330,7 +447,7 @@ class _AddDoctorState extends State<AddDoctor> {
                                                print(_name.text);
                                               print(_specialite);
                                               print(_email.text);
-                                              Doctor doctor = new Doctor( email: _email.text, name: _name.text, password: _password.text, specialite: _specialite );
+                                              Doctor doctor = new Doctor( email: _email.text, name: _name.text, password: _password.text, specialite: _specialite, adresse: _adresse.text, numero: _numero.text  );
                                               service.saveDoctor(doctor);
                                              singUp(_name.text, _email.text, _password.text);
                                              

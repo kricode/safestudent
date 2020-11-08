@@ -38,7 +38,7 @@ class _AddAmbuState extends State<AddAmbu> {
                     clipper: WaveClipperOne(),
                     child: Container(
                       height: 200,
-                      color: Color(0x8A0073e6),
+                      color: widget.secteur == 'samu' ? Color(0x8A0073e6 ) : Color.fromRGBO(58, 66, 86, 1.0),
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Row(
@@ -48,7 +48,8 @@ class _AddAmbuState extends State<AddAmbu> {
                               padding: const EdgeInsets.only(left: 10),
                               child: Container(
                                 height: 60,
-                                child: Image(image: AssetImage('assets/images/samu.png')),
+                                child: widget.secteur == 'samu' ? Image (image: AssetImage('assets/images/samu.png')) :
+                                           Image (image: AssetImage('assets/images/protectionDz.png'))   ,
                               ),
                             ),
                             Padding(
@@ -230,7 +231,7 @@ class _AddAmbuState extends State<AddAmbu> {
                                                       FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10),
                                                   ], 
                                    validator: (val) {
-                              return val.length != 10
+                              return val.length == 10
                                   ? null
                                   
                                   : "Entrez un numero Valide";
