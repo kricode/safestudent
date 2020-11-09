@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:projet/Admin/Student/Addstudent.dart';
 import 'package:projet/Admin/Student/Alertes.dart';
 import 'package:projet/Admin/Student/ajouterEtudiant.dart';
+import 'package:projet/Database/AuthService.dart';
+import 'package:projet/Sign/connection.dart';
 import './StudentDemandes.dart';
 import './StudentList.dart';
 
@@ -10,6 +12,7 @@ class Tabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AuthService authService; 
     final _tabpages = <Widget>[
       StudentDemandes(),
       StudentList()
@@ -44,7 +47,9 @@ class Tabs extends StatelessWidget {
         IconButton(
           icon: Icon(Icons.exit_to_app),
           onPressed: () {
-            print("you clicked on signout");
+            authService.signOut();
+            Navigator.push(context
+                       , MaterialPageRoute(builder: (context) => Connection()));
           },
         )
       ],

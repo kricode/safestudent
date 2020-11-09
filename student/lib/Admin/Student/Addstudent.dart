@@ -531,6 +531,7 @@ Future<void> _selectDate(BuildContext context) async {
                          uti utilisateur = new uti(email: _email, name:  _name, password: _password, role: "etudiant" ); 
                         service.saveUser(utilisateur);
                         Navigator.pop(context);
+                        
                          // service.saveDemande(_demande);
                       //   Navigator.pop(context,
                         //MaterialPageRoute(builder: (context) => Connection()),
@@ -556,28 +557,17 @@ Future<void> _selectDate(BuildContext context) async {
       )
     ;
   }
-   void  singUp(String name, String email , String password) async {
+     void  singUp(String name, String email , String password) async {
 
     
 
      utif =  await authService.signUpWithEmailAndPassword(email,
-          email).then((result){
-            if(result != null){
-              
-                
-              Map<String,String> userDataMap = {
-                "name" : name ,
-                "email" : email,
-                "role"  : "etudiant"
-                
-              };
-
-              service.addUserInfo(userDataMap);
-             
-            }
+          password).then((result){
+        
       });
     
   }
+
   
 
 /*

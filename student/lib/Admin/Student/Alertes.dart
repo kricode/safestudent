@@ -150,12 +150,7 @@ List userList = Provider.of<List<AlerteValide>>(context);
           
           
      
-        ) : RaisedButton(
-          child: Text("press"),
-          onPressed: (){
-            print(userList);
-          },
-        )
+        ) : Center(child: CircularProgressIndicator(),)
         //Center(
             //      child: CircularProgressIndicator()
        // ),

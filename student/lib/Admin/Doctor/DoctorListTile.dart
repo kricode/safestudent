@@ -161,7 +161,8 @@ List userList = Provider.of<List<Doctor>>(context);
                                                                     child: RaisedButton(
                                                                       child: Text("Supprimer"),
                                                                       onPressed: () {
-                                                                         service.removeStudent(userList[index].email);
+                                                                         service.removeDoctor(userList[index].email);
+                                                                          service.removeUser(userList[index].email);
                                                                           Navigator.pop(context);
                                                                           print("you clicked on Delete");
                                                                         

@@ -236,13 +236,13 @@ uti utilisateur;
                                     icon: new Image.asset('assets/images/check.png'),
                                                                   tooltip: 'Valider La Demande',
                                                                   onPressed: () {
-                                                                  //   utilisateur = new uti(name: widget.demande.name, email: widget.demande.email, role: 'etudiant', password: widget.demande.password);
-                                                                   // service.validerDemande(widget.demande);
+                                                                    utilisateur = new uti(name: widget.demande.name, email: widget.demande.email, role: 'etudiant', password: widget.demande.password);
+                                                                    service.validerDemande(widget.demande);
 
-                                                                    //service.saveUser(utilisateur);
+                                                                    service.saveUser(utilisateur);
                                   
-                                                                     //singUp();
-                                                                  //  service.removeDemande(widget.demande.email);
+                                                                     singUp();
+                                                                    service.removeDemande(widget.demande.email);
                                                                     // uti utilisateur;
                                                                     // utilisateur = uti(email: widget.demande.email, password: widget.demande.password, role: 'etudiant');
                                                                     // service.saveUser(utilisateur); 

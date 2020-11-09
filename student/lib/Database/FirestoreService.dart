@@ -133,7 +133,10 @@ Stream<List<Etudiant>> getStudentList() {
     return _db.collection('Demandes').doc(demandeemail).delete();
   }
    Future<void> removeDoctor(String doctoremail){
-    return _db.collection('Doctos').doc(doctoremail).delete();
+    return _db.collection('Doctors').doc(doctoremail).delete();
+  }
+     Future<void> removeUser(String useremail){
+    return _db.collection('users').doc(useremail).delete();
   }
 
 Future<void> removeStudent(String studentEmail){

@@ -309,6 +309,7 @@ class _EtudiantInfoState extends State<EtudiantInfo> {
                                                                       child: Text("Supprimer"),
                                                                       onPressed: () {
                                                                          service.removeStudent(widget.etudiant.email);
+                                                                         service.removeUser(widget.etudiant.email);
                                                                           Navigator.pop(context);
                                                                           print("you clicked on Delete");
                                                                           Scaffold.of(context).showSnackBar(snackBarsuppression);

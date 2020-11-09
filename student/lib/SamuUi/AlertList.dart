@@ -40,7 +40,8 @@ class _AlertListState extends State<AlertList> {
           icon: Icon(Icons.exit_to_app),
           onPressed: () {
             authService.signOut();
-            Navigator.pop(context);
+              Navigator.push(context
+                       , MaterialPageRoute(builder: (context) => Connection()));
           },
         )
       ],
@@ -217,19 +218,10 @@ class _AlertListState extends State<AlertList> {
               ) 
             
       ) : Center(
-        child: Column(
-            children: [
-              
-              Container(
-                child: Image(image:AssetImage('assets/images/noresult.jpg')),
-              ),
-              SizedBox(height: 30),
-              Text('Aucune Demande Pour Le Moment',style: TextStyle(
+        child: Text('Aucune Demande Pour Le Moment',style: TextStyle(
                                         fontSize: 18,
                                         color: Color(0xff0962ff),
                                         fontWeight: FontWeight.bold),)
-            ],
-        ),
       ) ,
             ),
 

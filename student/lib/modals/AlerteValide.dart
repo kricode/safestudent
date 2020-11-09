@@ -12,11 +12,12 @@ class AlerteValide{
     String cas;
     Timestamp anniv;
     Timestamp temps;
+    Timestamp valid;
     String image;
    GeoPoint location;
    String service;
    String ambu;
-     AlerteValide({this.id , this.nameEtu, this.email, this.cas, this.location,this.temps, this.numero, this.anniv, this.image, this.ambu, this.service});
+     AlerteValide({this.id , this.nameEtu, this.email, this.cas, this.location,this.temps, this.numero, this.anniv, this.image, this.ambu, this.service, this.valid});
  
  Map<String,dynamic> toMap(){
     return {
@@ -30,6 +31,7 @@ class AlerteValide{
     'anniv' : anniv,
     'image' : image,
     'service' : service,
+    'valid' : valid,
     'ambu' : ambu
 
    
@@ -51,6 +53,7 @@ AlerteValide.fromFirestore(Map<String, dynamic> firestore):
         anniv = firestore['anniv'],
 
         numero = firestore['numero'],
+        valid = firestore['valid'],
         service = firestore['service'],
 
         ambu = firestore['ambu'],

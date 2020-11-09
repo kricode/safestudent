@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:projet/Database/AuthService.dart';
 import 'package:projet/Database/FirestoreService.dart';
@@ -166,17 +167,20 @@ List userList = Provider.of<List<Ambulancier>>(context);
                                               print("error");
                                             }
                                           });
+                                          DateTime time =  DateTime.now();
                                           sender.sendSms(messagesend);
                                           AlerteValide alerteValide = new AlerteValide( nameEtu: widget.alerte.name ,anniv: widget.alerte.anniv
                                           ,email: widget.alerte.email, location: widget.alerte.place, numero: widget.alerte.numero, cas: widget.alerte.cas,
-                                          temps: widget.alerte.temps, service: 'samu', ambu: userList[index].name  );
+                                          temps: widget.alerte.temps, service: 'Protection Civile', ambu: userList[index].name, valid: Timestamp.fromDate(time)   );
                                           String alerteId = '${widget.alerte.name} _ ${userList[index].name} _ ${widget.alerte.temps.toDate().toString()} _ Pompier';
                                           print(alerteValide.ambu);
 
                                           service.valideAlerte(alerteValide, alerteId);
                                           service.removeAlert(widget.alerte.email);
+                                          
                                            Navigator.push(context,
                         MaterialPageRoute(builder: (context) => AcceuilPompier()));
+                        
                                            
                                           
                                            

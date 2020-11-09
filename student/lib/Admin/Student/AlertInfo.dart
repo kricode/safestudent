@@ -116,6 +116,41 @@ class _AlertInfoState extends State<AlertInfo> {
                                 ),
                               
                             ),
+                            SizedBox(height: 30,),
+                            Container(
+                            width:300,
+                              height:50.0,
+                              padding: EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              color:Colors.white,
+                               borderRadius:BorderRadius.circular(50.0),
+                            
+                            ),
+                            child:Row(
+                                  
+                                  children:<Widget>[
+                                     
+                                   
+                                    Text(
+                                "Evacuation",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(fontWeight: FontWeight.w100),
+                              ),
+                             
+                               Expanded(
+                                    child: Text(
+                                  widget.alerte.valid.toDate().toString(),
+                                  textDirection: TextDirection.ltr,
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(fontWeight: FontWeight.w100),
+                                )),
+                              
+                                 
+                                    
+                                  ]
+                                ),
+                              
+                            ),
 
                       SizedBox(height: 30,),
                        Container(

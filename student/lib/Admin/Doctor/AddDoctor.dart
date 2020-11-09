@@ -36,7 +36,7 @@ class _AddDoctorState extends State<AddDoctor> {
     
 
      utif =  await authService.signUpWithEmailAndPassword(email,
-          email).then((result){
+          password).then((result){
         
       });
     
@@ -53,7 +53,7 @@ class _AddDoctorState extends State<AddDoctor> {
    String _specialite;
   @override
   Widget build(BuildContext context) {
-     final snackbarajout = SnackBar(content: Text('Vous avez ajouté un Etudiant'));
+     final snackbarajout = SnackBar(content: Text('Vous avez ajouté un Medecin'));
 
     return Scaffold(
       body: SingleChildScrollView(

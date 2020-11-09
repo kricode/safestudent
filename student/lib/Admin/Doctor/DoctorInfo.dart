@@ -245,9 +245,57 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                               icon: new Image.asset('assets/images/trash.png'),
                                              tooltip: 'Supprimer Un Medecin',
                                               onPressed: () {
-                                              //service.removeStudent(widget.doctor.email);
-                                              Navigator.pop(context);
-                                              Scaffold.of(context).showSnackBar(snackBarsuppression);
+                                               showDialog(
+              
+                                                    context: context,
+                                                    builder: (BuildContext context) {
+                                                      return AlertDialog(
+                                                        title: Text('Voulez vous vraiment supprimer ce Medecin?'),
+                                                        content: Stack(
+                                                          overflow: Overflow.visible,
+                                                          children: <Widget>[
+                                                            
+                                                            Form(
+                                                            
+                                                              child: Row(
+                                                                mainAxisSize: MainAxisSize.min,
+                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                children: <Widget>[
+
+                                                                  
+                                                                  SizedBox(height: 40,),
+                                                                  Padding(
+                                                                    padding: const EdgeInsets.all(8.0),
+                                                                    child: RaisedButton(
+                                                                      child: Text("Supprimer"),
+                                                                      onPressed: () {
+                                                                          Navigator.pop(context);
+                                                                         service.removeDoctor(widget.doctor.email);
+                                                                         
+
+                                                                        
+                                                                      },
+                                                                    ),
+                                                                  ),Padding(
+                                                                    padding: const EdgeInsets.all(8.0),
+                                                                    child: RaisedButton(
+                                                                      child: Text("Non"),
+                                                                      onPressed: () {
+                                                                        Navigator.pop(context);
+                                                                        
+                                                                        
+                                                                      },
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        
+                                                      );
+                });
+                                              
 
 
                                                print("you clicked");

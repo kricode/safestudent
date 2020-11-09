@@ -39,6 +39,7 @@ FirebaseAuth auth = FirebaseAuth.instance;
 FirestoreService service = FirestoreService();
 AuthService serviceauth = AuthService();
 
+         SmsSender sender = new SmsSender();
 
   FirebaseFirestore _db = FirebaseFirestore.instance;
 
@@ -63,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
  
  final GlobalKey<ScaffoldState> _globalKeyScaffold =  new GlobalKey<ScaffoldState>();
  Future <String>createAlertDialog(BuildContext context){
-  String word ="veuillez ne pas bouger, le SAMU a été alerté";
+  String word ="veuillez ne pas bouger, les services évacuateurs a été alerté";
    return showDialog(context: context,builder:(context){
      return AlertDialog(
                 shape: RoundedRectangleBorder(
@@ -81,24 +82,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 DateTime time =  DateTime.now();
                 _getlocation();
                GeoFirePoint point = geo.point(latitude: locationdata.latitude, longitude: locationdata.longitude);
-              //  alert = new Alerte(name: donnee['name'], email: donnee['email'], numero: donnee['numero'], temps: Timestamp.fromDate(time), anniv: donnee['anniv'], place: point.data);
-              
-                  //           service.saveAlerte(alert);
-              _db.collection('Alertes').doc(donnee['email']).set({ 
-    'name': donnee['name'],
-    'email': donnee['email'],
-    'numero' : donnee['numero'],
-    'temps' : Timestamp.fromDate(time) ,
-    'cas' : donnee['cas'] ,
-    'place' : point.data,
-    'role' : 'etudiant',
-
-    'anniv' : donnee['anniv']
-  });
-                 String message = 'Vous Avez Une Nouvelle Alerte';
+               String message = 'Vous Avez Une Nouvelle Alerte';
                                            
-                                           //A essayer une fois i have reseau psk djezzy makach l credit xd
-                                           SmsMessage messagesend = new SmsMessage( '0657146957', message);
+                                          SmsMessage messagesend = new SmsMessage( '0657146957', message);
+                                          sender.sendSms(messagesend);
                                           messagesend.onStateChanged.listen((state) {
                                             if (state == SmsMessageState.Sent) {
                                               print("SMS is sent!");
@@ -108,6 +95,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                               print("error");
                                             }
                                           });
+              //  alert = new Alerte(name: donnee['name'], email: donnee['email'], numero: donnee['numero'], temps: Timestamp.fromDate(time), anniv: donnee['anniv'], place: point.data);
+              
+                  //           service.saveAlerte(alert);
+              _db.collection('Alertes').doc(donnee['email']).set({ 
+                                                    'name': donnee['name'],
+                                                    'email': donnee['email'],
+                                                    'numero' : donnee['numero'],
+                                                    'temps' : Timestamp.fromDate(time) ,
+                                                    'cas' : donnee['cas'] ,
+                                                    'place' : point.data,
+                                                    'role' : 'etudiant',
+
+                                                    'anniv' : donnee['anniv']
+                                                  });
+                 
                 Navigator.of(context).pop(word.toString());
               }
             ),

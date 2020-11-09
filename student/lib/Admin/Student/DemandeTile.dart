@@ -332,20 +332,7 @@ List userList = Provider.of<List<Demande>>(context);
 
       await authService.signUpWithEmailAndPassword(email,
           password).then((result){
-            if(result != null){
-              service.saveEtudiant(etudiant);
-                
-              Map<String,String> userDataMap = {
-                "name" : name,
-                "email" : email,
-                "role"  : "etudiant"
-              };
-
-              service.addUserInfo(userDataMap);
-
             
-              
-            }
       });
     
   }
